@@ -56,7 +56,4 @@ jobs:
       - name: Gradle dependency submission
         uses: mikepenz/gradle-dependency-submission@v0.8.6
         with:
-          gradle-build-module: |-
-            :app
-          gradle-build-configuration: |-
-            compileClasspath
+          gradle-build-module: :app
