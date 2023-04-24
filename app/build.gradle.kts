@@ -49,6 +49,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("com.mapbox.maps:android:10.12.2")
 
     testImplementation("junit:junit:4.13.2")
 
