@@ -1,6 +1,7 @@
 package com.ptech.foodbank.ui.home
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location2
+import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -63,8 +65,13 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val animInflater = TransitionInflater.from(requireContext())
+
+        exitTransition = animInflater.inflateTransition(R.transition.fade)
+        enterTransition = animInflater.inflateTransition(R.transition.fade)
+
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         // setup mapbox maps
         mapView = binding.mapView

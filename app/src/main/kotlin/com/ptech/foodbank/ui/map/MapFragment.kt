@@ -2,6 +2,7 @@ package com.ptech.foodbank.ui.map
 
 import android.content.Context
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -105,9 +106,13 @@ class MapFragment : Fragment() {
     ): View {
         @Suppress("UNUSED_VARIABLE") // to be used when getting data from firebase
         val mapViewModel = ViewModelProvider(this)[MapViewModel::class.java]
+        val animInflater = TransitionInflater.from(requireContext())
+        val root: View = binding.root
+
+        exitTransition = animInflater.inflateTransition(R.transition.fade)
+        enterTransition = animInflater.inflateTransition(R.transition.fade)
 
         _binding = FragmentMapBinding.inflate(inflater, container, false)
-        val root: View = binding.root
         context = binding.root.context
 
         discover = Discover.create(getString(R.string.mapbox_access_token))
