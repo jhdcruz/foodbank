@@ -12,6 +12,18 @@
 #   public *;
 #}
 
+-keep class com.google.android.gms.tasks.Task
+-keep class androidx.window.extensions.embedding.**
+-keep class javax.naming.*
+
+# okhttp
+-dontwarn okhttp3.internal.platform.**
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
+-dontwarn org.slf4j.impl.**
+
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable

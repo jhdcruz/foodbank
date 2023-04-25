@@ -21,13 +21,29 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+            isShrinkResources = false
+            isDebuggable = true
+        }
+
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+        }
+    }
+    packaging {
+        resources {
+            excludes += "META-INF/proguard/okhttp3.pro"
+            excludes += "META-INF/NOTICE.txt"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/DEPENDENCIES.txt"
         }
     }
     compileOptions {
