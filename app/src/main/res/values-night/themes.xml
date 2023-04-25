@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.FoodBank" parent="Theme.Material3.DynamicColors.Dark">
+    <style name="Theme.FoodBank" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">?attr/colorPrimary</item>
         <item name="colorPrimaryVariant">?attr/colorOnPrimaryContainer</item>
@@ -12,6 +12,7 @@
         <item name="colorOnSecondary">?attr/colorOnSecondary</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:statusBarColor">?android:attr/windowBackground</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 </resources>
