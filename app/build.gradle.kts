@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
 }
 
 android {
@@ -54,6 +55,7 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics:18.3.6")
     implementation("com.google.firebase:firebase-analytics:21.2.2")
     implementation("com.google.firebase:firebase-firestore-ktx:24.5.0")
+    implementation("com.google.firebase:firebase-perf-ktx:20.3.1")
 
     testImplementation("junit:junit:4.13.2")
 
