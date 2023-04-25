@@ -17,7 +17,7 @@ on:
       - "*"
 
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs="-XX:MaxMetaspaceSize=2g -PmapboxUsername=mapbox -PmapboxPassword=${{ secrets.MAPBOX_TOKEN }}"
+  GRADLE_OPTS: -Dorg.gradle.jvmargs="-XX:MaxMetaspaceSize=2g"
   JDK_VERSION: 19
 
 jobs:
@@ -45,12 +45,16 @@ jobs:
         with:
           arguments: |
             test
+            -PmapboxUsername=mapbox
+            -PmapboxPassword=${{ secrets.MAPBOX_TOKEN }}
 
       - name: Build with analyze
         uses: gradle/gradle-build-action@v2
         with:
           arguments: |
             build
+            -PmapboxUsername=mapbox
+            -PmapboxPassword=${{ secrets.MAPBOX_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
