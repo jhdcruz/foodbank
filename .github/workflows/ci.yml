@@ -3,6 +3,8 @@ name: ci
 on:
   workflow_dispatch:
   pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -23,6 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
 
       - name: Set up JDK ${{ env.JDK_VERSION }}
         uses: actions/setup-java@v3
@@ -57,3 +61,8 @@ jobs:
         uses: mikepenz/gradle-dependency-submission@v0.8.6
         with:
           gradle-build-module: :app
+
+      - name: Qodana scan
+        uses: JetBrains/qodana-action@main
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
