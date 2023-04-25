@@ -9,8 +9,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ptech.foodbank.databinding.ActivityMainBinding
-import com.ptech.foodbank.utils.DiscoverUtils
-import com.ptech.foodbank.utils.DiscoverUtils.isPermissionGranted
+import com.ptech.foodbank.utils.MbUtils
+import com.ptech.foodbank.utils.MbUtils.isPermissionGranted
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ),
-                DiscoverUtils.PERMISSIONS_REQUEST_LOCATION
+                MbUtils.PERMISSIONS_REQUEST_LOCATION
             )
         }
     }

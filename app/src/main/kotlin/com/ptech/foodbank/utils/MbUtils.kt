@@ -38,7 +38,7 @@ import java.util.UUID
  * Mapbox-specific utility functions
  */
 
-object DiscoverUtils {
+object MbUtils {
     const val PERMISSIONS_REQUEST_LOCATION = 0
 
     private val MARKERS_BOTTOM_OFFSET = dpToPx(176).toDouble()
