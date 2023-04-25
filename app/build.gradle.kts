@@ -52,6 +52,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
     implementation("com.mapbox.maps:android:10.12.2")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.google.firebase:firebase-crashlytics:18.3.6")
     implementation("com.google.firebase:firebase-analytics:21.2.2")
     implementation("com.google.firebase:firebase-firestore-ktx:24.5.0")
