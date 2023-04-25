@@ -41,8 +41,6 @@ allprojects {
         parallel = true
         ignoreFailures = true
         buildUponDefaultConfig = true
-
-        config.setFrom(files("config/detekt/detekt.yml"))
     }
 
     tasks.withType<Detekt> {
