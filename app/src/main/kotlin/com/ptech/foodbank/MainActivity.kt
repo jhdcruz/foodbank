@@ -1,12 +1,16 @@
 package com.ptech.foodbank
 
+import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ptech.foodbank.databinding.ActivityMainBinding
+import com.ptech.foodbank.utils.DiscoverUtils
+import com.ptech.foodbank.utils.DiscoverUtils.isPermissionGranted
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,5 +29,17 @@ class MainActivity : AppCompatActivity() {
         val navController: NavController = navHostFragment.navController
 
         navView.setupWithNavController(navController)
+
+        // check and request for required permissions
+        if (!isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                DiscoverUtils.PERMISSIONS_REQUEST_LOCATION
+            )
+        }
     }
 }
