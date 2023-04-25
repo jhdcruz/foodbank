@@ -43,12 +43,18 @@ jobs:
       - name: Test with JDK ${{ env.JDK_VERSION }}
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: test
+          arguments: |
+            test
+            -PmapboxUsername=mapbox
+            -PmapboxPassword=${{ secrets.MAPBOX_TOKEN }}
 
       - name: Build with analyze
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build
+          arguments: |
+            build
+            -PmapboxUsername=mapbox
+            -PmapboxPassword=${{ secrets.MAPBOX_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
