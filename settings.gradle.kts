@@ -22,6 +22,8 @@ dependencyResolutionManagement {
                 create<BasicAuthentication>("basic")
             }
 
+            // relies on the mapboxUsername and mapboxPassword
+            // in gradle.properties at $HOME/.gradle
             credentials(PasswordCredentials::class)
         }
     }
