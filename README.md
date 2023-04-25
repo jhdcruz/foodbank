@@ -64,8 +64,8 @@ R.strings.xml file.
 -   Crashlytics
 -   Authentication
 
--   Download `google-services.json` from firebase console's project settings, and copy it the the
-    project directory
+Download `google-services.json` from firebase console's project settings, and copy it the the
+project directory
 
 ## License
 
