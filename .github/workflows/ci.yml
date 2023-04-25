@@ -40,23 +40,32 @@ jobs:
       - name: ./gradlew permissions
         run: chmod +x ./gradlew
 
+      - name: Prepare libraries configs
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+          MAPBOX_API_CREDS: ${{ secrets.MAPBOX_API_CREDS }}
+        run: |
+          echo $GOOGLE_SERVICES_JSON | base64 -di > ./app/google-services.json
+          echo $MAPBOX_API_CREDS | base64 -di > ./gradle.properties
+
       - name: Test with JDK ${{ env.JDK_VERSION }}
         uses: gradle/gradle-build-action@v2
         with:
           arguments: |
             test
-            -PmapboxUsername=mapbox
-            -PmapboxPassword=${{ secrets.MAPBOX_TOKEN }}
 
       - name: Build with analyze
         uses: gradle/gradle-build-action@v2
         with:
           arguments: |
             build
-            -PmapboxUsername=mapbox
-            -PmapboxPassword=${{ secrets.MAPBOX_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Gradle dependency submission
+        uses: mikepenz/gradle-dependency-submission@v0.8.6
+        with:
+          gradle-build-module: :app
 
       - name: Qodana scan
         uses: JetBrains/qodana-action@main
