@@ -25,7 +25,7 @@ dependencyResolutionManagement {
             // finds `mapboxPassword` on gradle.properties
             credentials {
                 username = "mapbox"
-                password = PasswordCredentials::class.toString()
+                password = providers.gradleProperty("mapboxPassword").orNull
             }
         }
     }
