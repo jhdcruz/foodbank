@@ -58,11 +58,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Gradle dependency submission
-        uses: mikepenz/gradle-dependency-submission@v0.8.6
-        with:
-          gradle-build-module: :app -PmapboxUsername=mapbox -Pmapboxpassword=${{ secrets.MAPBOX_TOKEN }}
-
       - name: Qodana scan
         uses: JetBrains/qodana-action@main
         env:
