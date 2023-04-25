@@ -1,6 +1,5 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 buildscript {
@@ -43,12 +42,7 @@ allprojects {
         ignoreFailures = true
         buildUponDefaultConfig = true
 
-        source = objects.fileCollection().from(
-            DetektExtension.DEFAULT_SRC_DIR_JAVA,
-            DetektExtension.DEFAULT_TEST_SRC_DIR_JAVA,
-            DetektExtension.DEFAULT_SRC_DIR_KOTLIN,
-            DetektExtension.DEFAULT_TEST_SRC_DIR_KOTLIN,
-        )
+        config.setFrom(files("config/detekt/detekt.yml"))
     }
 
     tasks.withType<Detekt> {
