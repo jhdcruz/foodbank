@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
 
         val navController: NavController = navHostFragment.navController
-
         navView.setupWithNavController(navController)
 
         // check and request for required permissions
