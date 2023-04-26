@@ -1,0 +1,6 @@
+# enable handling/throwing of generic exceptions
+exceptions:
+  TooGenericExceptionCaught:
+    active: false
+  TooGenericExceptionThrown:
+    active: false
