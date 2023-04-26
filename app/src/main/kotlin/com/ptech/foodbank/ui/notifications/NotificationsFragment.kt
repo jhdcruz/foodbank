@@ -1,14 +1,12 @@
 package com.ptech.foodbank.ui.notifications
 
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentNotificationsBinding
 
 class NotificationsFragment : Fragment() {
@@ -26,12 +24,6 @@ class NotificationsFragment : Fragment() {
     ): View {
         val notificationsViewModel =
             ViewModelProvider(this)[NotificationsViewModel::class.java]
-        val animInflater = TransitionInflater.from(requireContext())
-
-        exitTransition = animInflater.inflateTransition(R.transition.fade)
-        enterTransition = animInflater.inflateTransition(R.transition.fade)
-
-
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
         val root: View = binding.root
