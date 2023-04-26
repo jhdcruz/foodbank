@@ -12,7 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-
 import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.android.core.location.LocationEngineProvider
 import com.mapbox.android.gestures.MoveGestureDetector
@@ -30,7 +29,6 @@ import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location2
-
 import com.mapbox.search.discover.Discover
 import com.mapbox.search.discover.DiscoverOptions
 import com.mapbox.search.discover.DiscoverQuery
@@ -38,7 +36,6 @@ import com.mapbox.search.discover.DiscoverResult
 import com.mapbox.search.ui.view.CommonSearchViewConfiguration
 import com.mapbox.search.ui.view.DistanceUnitType
 import com.mapbox.search.ui.view.place.SearchPlaceBottomSheetView
-
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
 import com.ptech.foodbank.utils.MbUtils.MARKERS_INSETS
@@ -133,12 +130,11 @@ class MapFragment : Fragment() {
                 // user location tracker
                 mapView.gestures.addOnMoveListener(onMoveListener)
                 mapView.location2.addOnIndicatorPositionChangedListener(
-                    onIndicatorPositionChangedListener
+                    onIndicatorPositionChangedListener,
                 )
                 mapView.location2.addOnIndicatorBearingChangedListener(
-                    onIndicatorBearingChangedListener
+                    onIndicatorBearingChangedListener,
                 )
-
             }
         }
 
@@ -163,7 +159,7 @@ class MapFragment : Fragment() {
                             //       from firebase
                             query = DiscoverQuery.Category.RESTAURANTS,
                             proximity = location,
-                            options = DiscoverOptions(limit = 10)
+                            options = DiscoverOptions(limit = 10),
                         )
 
                         response.onValue { results ->
@@ -172,7 +168,7 @@ class MapFragment : Fragment() {
                             Toast.makeText(
                                 context,
                                 "Something went wrong while searching.",
-                                Toast.LENGTH_SHORT
+                                Toast.LENGTH_SHORT,
                             ).show()
 
                             throw RuntimeException(exception)
@@ -244,7 +240,10 @@ class MapFragment : Fragment() {
         fun adjustMarkersForOpenCard() {
             val coordinates = annotations.values.map { it.coordinate }
             val cameraOptions = mapboxMap.cameraForCoordinates(
-                coordinates, MARKERS_INSETS_OPEN_CARD, bearing = null, pitch = null
+                coordinates,
+                MARKERS_INSETS_OPEN_CARD,
+                bearing = null,
+                pitch = null,
             )
             mapboxMap.setCamera(cameraOptions)
         }
@@ -252,7 +251,10 @@ class MapFragment : Fragment() {
         fun adjustMarkersForClosedCard() {
             val coordinates = annotations.values.map { it.coordinate }
             val cameraOptions = mapboxMap.cameraForCoordinates(
-                coordinates, MARKERS_INSETS, bearing = null, pitch = null
+                coordinates,
+                MARKERS_INSETS,
+                bearing = null,
+                pitch = null,
             )
             mapboxMap.setCamera(cameraOptions)
         }
@@ -280,7 +282,10 @@ class MapFragment : Fragment() {
             }
 
             val cameraOptions = mapboxMap.cameraForCoordinates(
-                coordinates, MARKERS_INSETS, bearing = null, pitch = null
+                coordinates,
+                MARKERS_INSETS,
+                bearing = null,
+                pitch = null,
             )
             mapboxMap.setCamera(cameraOptions)
         }
