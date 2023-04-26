@@ -4,3 +4,7 @@ exceptions:
     active: false
   TooGenericExceptionThrown:
     active: false
+
+style:
+  ForbiddenComment:
+    active: false
