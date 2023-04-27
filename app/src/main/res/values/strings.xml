@@ -8,4 +8,22 @@
     <string name="mapbox_access_token" tools:ignore="Typos">pk.eyJ1IjoiamhkY3J1eiIsImEiOiJjbGd1d3F5czQyYXAzM3FwOWRraTJnMXdiIn0.wUyq6UeM3XIKDpL9gLVTQg</string>
 
     <string name="get_current_location">Get current location</string>
+    <string name="food_bank_location_preview">Food bank location preview</string>
+    <string name="directions">Directions</string>
+    <string name="call">Call</string>
+    <string name="website">Website</string>
+    <string name="food_bank_load_capacity">Food bank load capacity</string>
+    <string name="searchbar_hint">Search for food banks</string>
+    <string name="location_image_preview">Location image preview</string>
+
+    <string name="sample_heading">
+        Lorem ipsum dolor
+    </string>
+    <string name="sample_text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed turpis felis,
+        fermentum at quam at, mattis ullamcorper nulla. Nam vitae felis ut enim rhoncus
+        volutpat quis eu magna. Vivamus malesuada ipsum ut elit dictum maximus. Mauris
+        sagittis sapien vel mattis imperdiet. Aliquam in est felis. Pellentesque habitant.
+    </string>
+    <string name="load_capacity">Load Capacity</string>
 </resources>
