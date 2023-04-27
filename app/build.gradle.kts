@@ -41,6 +41,7 @@ android {
     packaging {
         resources {
             excludes += "META-INF/proguard/okhttp3.pro"
+            excludes += "META-INF/proguard/coroutines.pro"
             excludes += "META-INF/NOTICE.txt"
             excludes += "META-INF/LICENSE.txt"
             excludes += "META-INF/DEPENDENCIES.txt"
@@ -64,18 +65,20 @@ dependencies {
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.recyclerview:recyclerview:1.3.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.0-RC")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
     implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.0-RC")
+    implementation("io.coil-kt:coil:2.3.0")
 
     // mapbox
     implementation("com.mapbox.maps:android:10.12.2")
     implementation("com.mapbox.search:discover:1.0.0-rc.3")
     implementation("com.mapbox.search:mapbox-search-android-ui:1.0.0-rc.3")
+    implementation("com.mapbox.search:mapbox-search-android:1.0.0-rc.3")
 
     // firebase
     implementation("com.google.firebase:firebase-crashlytics:18.3.6")
