@@ -56,6 +56,11 @@ jobs:
           arguments: |
             test
 
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v1
+        with:
+          trunk-token: ${{ secrets.TRUNK_TOKEN }}
+
       - name: Build with analyze
         uses: gradle/gradle-build-action@v2
         with:
@@ -73,9 +78,3 @@ jobs:
         uses: JetBrains/qodana-action@main
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-
-      - name: Trunk Check
-        uses: trunk-io/trunk-action@v1
-        with:
-          trunk-token: ${{ secrets.TRUNK_TOKEN }}
-
