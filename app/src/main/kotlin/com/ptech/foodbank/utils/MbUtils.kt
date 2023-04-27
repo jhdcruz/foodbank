@@ -34,13 +34,10 @@ import com.mapbox.search.result.SearchResultType
 import com.mapbox.search.ui.view.place.SearchPlace
 import java.util.UUID
 
-/*
+/**
  * Mapbox-specific utility functions
  */
-
 object MbUtils {
-    const val PERMISSIONS_REQUEST_LOCATION = 0
-
     private val MARKERS_BOTTOM_OFFSET = dpToPx(176).toDouble()
     private val MARKERS_EDGE_OFFSET = dpToPx(64).toDouble()
     private val PLACE_CARD_HEIGHT = dpToPx(300).toDouble()
@@ -145,18 +142,6 @@ object MbUtils {
     fun View.hideKeyboard() {
         context.inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
-
-    /**
-     * Check for requested [permission]
-     */
-    fun Context.isPermissionGranted(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            permission
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-
     /**
      * Show a toast message using a resource string [resId].
      */
