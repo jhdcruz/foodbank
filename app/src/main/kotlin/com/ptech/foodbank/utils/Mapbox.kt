@@ -3,7 +3,6 @@ package com.ptech.foodbank.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -16,7 +15,6 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.android.core.location.LocationEngineCallback
 import com.mapbox.android.core.location.LocationEngineResult
@@ -37,7 +35,7 @@ import java.util.UUID
 /**
  * Mapbox-specific utility functions
  */
-object MbUtils {
+object Mapbox {
     private val MARKERS_BOTTOM_OFFSET = dpToPx(176).toDouble()
     private val MARKERS_EDGE_OFFSET = dpToPx(64).toDouble()
     private val PLACE_CARD_HEIGHT = dpToPx(300).toDouble()

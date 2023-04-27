@@ -37,12 +37,12 @@ import com.mapbox.search.ui.view.DistanceUnitType
 import com.mapbox.search.ui.view.place.SearchPlaceBottomSheetView
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
-import com.ptech.foodbank.utils.MbUtils.MARKERS_INSETS
-import com.ptech.foodbank.utils.MbUtils.MARKERS_INSETS_OPEN_CARD
-import com.ptech.foodbank.utils.MbUtils.bitmapFromDrawableRes
-import com.ptech.foodbank.utils.MbUtils.lastKnownLocation
-import com.ptech.foodbank.utils.MbUtils.toSearchPlace
-import com.ptech.foodbank.utils.MbUtils.userDistanceTo
+import com.ptech.foodbank.utils.Mapbox.MARKERS_INSETS
+import com.ptech.foodbank.utils.Mapbox.MARKERS_INSETS_OPEN_CARD
+import com.ptech.foodbank.utils.Mapbox.bitmapFromDrawableRes
+import com.ptech.foodbank.utils.Mapbox.lastKnownLocation
+import com.ptech.foodbank.utils.Mapbox.toSearchPlace
+import com.ptech.foodbank.utils.Mapbox.userDistanceTo
 import kotlinx.coroutines.launch
 
 class MapFragment : Fragment() {
