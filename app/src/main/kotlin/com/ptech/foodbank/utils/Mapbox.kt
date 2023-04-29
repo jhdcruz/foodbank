@@ -2,213 +2,195 @@ package com.ptech.foodbank.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.android.core.location.LocationEngineCallback
 import com.mapbox.android.core.location.LocationEngineResult
 import com.mapbox.android.core.permissions.PermissionsManager
+import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.BoundingBox
 import com.mapbox.geojson.Point
-import com.mapbox.maps.EdgeInsets
+import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
+import com.mapbox.maps.plugin.gestures.OnMoveListener
+import com.mapbox.maps.plugin.gestures.gestures
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
+import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
+import com.mapbox.maps.plugin.locationcomponent.location2
 import com.mapbox.maps.toCameraOptions
 import com.mapbox.search.common.DistanceCalculator
-import com.mapbox.search.discover.DiscoverAddress
-import com.mapbox.search.discover.DiscoverResult
-import com.mapbox.search.result.SearchAddress
-import com.mapbox.search.result.SearchResultType
-import com.mapbox.search.ui.view.place.SearchPlace
-import java.util.UUID
 
 /**
- * Mapbox-specific utility functions
+ * Mapbox SDK integration helper
+ *
+ * @param mapView MapView instance reference
  */
-object Mapbox {
-    private val MARKERS_BOTTOM_OFFSET = dpToPx(176).toDouble()
-    private val MARKERS_EDGE_OFFSET = dpToPx(64).toDouble()
-    private val PLACE_CARD_HEIGHT = dpToPx(300).toDouble()
+class Mapbox(private val mapView: MapView) {
 
-    val MARKERS_INSETS = EdgeInsets(
-        MARKERS_EDGE_OFFSET,
-        MARKERS_EDGE_OFFSET,
-        MARKERS_BOTTOM_OFFSET,
-        MARKERS_EDGE_OFFSET,
-    )
-
-    val MARKERS_INSETS_OPEN_CARD = EdgeInsets(
-        MARKERS_EDGE_OFFSET,
-        MARKERS_EDGE_OFFSET,
-        PLACE_CARD_HEIGHT,
-        MARKERS_EDGE_OFFSET,
-    )
-
-    private fun dpToPx(dp: Int): Int {
-        return (dp * Resources.getSystem().displayMetrics.density).toInt()
-    }
-
-    private fun Context.showToast(text: CharSequence) {
-        Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
-    }
-
-    private val Context.inputMethodManager: InputMethodManager
-        get() = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-    private fun DiscoverAddress.toSearchAddress(): SearchAddress {
-        return SearchAddress(
-            houseNumber = houseNumber,
-            street = street,
-            neighborhood = neighborhood,
-            locality = locality,
-            postcode = postcode,
-            place = place,
-            district = district,
-            region = region,
-            country = country,
+    private val onIndicatorBearingChangedListener = OnIndicatorBearingChangedListener {
+        mapView.getMapboxMap().setCamera(
+            CameraOptions.Builder()
+                .bearing(it)
+                .build()
         )
     }
 
-    private fun Drawable.toBitmap(): Bitmap? {
-        return if (this is BitmapDrawable) {
-            bitmap
-        } else {
-            // copying drawable object to not manipulate on the same reference
-            val constantState = constantState ?: return null
-            val drawable = constantState.newDrawable().mutate()
-            val bitmap: Bitmap = Bitmap.createBitmap(
-                drawable.intrinsicWidth,
-                drawable.intrinsicHeight,
-                Bitmap.Config.ARGB_8888,
-            )
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            bitmap
+    private val onIndicatorPositionChangedListener = OnIndicatorPositionChangedListener {
+        mapView.getMapboxMap().setCamera(
+            CameraOptions.Builder()
+                .center(it)
+                .zoom(16.0)
+                .build()
+        )
+
+        mapView.gestures.focalPoint = mapView.getMapboxMap().pixelForCoordinate(it)
+    }
+
+    private val onMoveListener = object : OnMoveListener {
+        override fun onMoveBegin(detector: MoveGestureDetector) {
+            onCameraTrackingDismissed()
+        }
+
+        override fun onMove(detector: MoveGestureDetector): Boolean {
+            return false
+        }
+
+        @Suppress("EmptyFunctionBlock")
+        override fun onMoveEnd(detector: MoveGestureDetector) {
         }
     }
 
     /**
-     * Get last known location from the [LocationEngine].
+     * Track and follow user location on map
      */
-    @SuppressLint("MissingPermission")
-    fun LocationEngine.lastKnownLocation(context: Context, callback: (Point?) -> Unit) {
-        if (!PermissionsManager.areLocationPermissionsGranted(context)) {
-            callback(null)
+    fun setupGesturesListener() {
+        mapView.gestures.addOnMoveListener(onMoveListener)
+    }
+
+    // Update camera on movements
+    fun initLocationComponent() {
+        val locationComponentPlugin = mapView.location2
+
+        locationComponentPlugin.updateSettings {
+            enabled = true
+            pulsingEnabled = true
         }
 
-        getLastLocation(object : LocationEngineCallback<LocationEngineResult> {
-            override fun onSuccess(result: LocationEngineResult?) {
-                val location =
-                    (result?.locations?.lastOrNull() ?: result?.lastLocation)?.let { location ->
-                        Point.fromLngLat(location.longitude, location.latitude)
-                    }
-                callback(location)
-            }
-
-            override fun onFailure(exception: Exception) {
-                callback(null)
-            }
-        })
+        locationComponentPlugin.addOnIndicatorPositionChangedListener(
+            onIndicatorPositionChangedListener,
+        )
+        locationComponentPlugin.addOnIndicatorBearingChangedListener(
+            onIndicatorBearingChangedListener,
+        )
     }
 
     /**
-     * Get user distance to the [destination].
+     * Removes user location tracking.
+     * usually when it is no longer needed such as
+     * onDestroy() or onPause()
      */
-    fun LocationEngine.userDistanceTo(
-        context: Context,
-        destination: Point,
-        callback: (Double?) -> Unit,
-    ) {
-        lastKnownLocation(context) { location ->
-            if (location == null) {
-                callback(null)
+    fun onCameraTrackingDismissed() {
+        mapView.location2.removeOnIndicatorPositionChangedListener(
+            onIndicatorPositionChangedListener,
+        )
+
+        mapView.location2.removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
+        mapView.gestures.removeOnMoveListener(onMoveListener)
+    }
+
+    /**
+     * Mapbox-specific utility functions
+     */
+    companion object Utils {
+        private fun dpToPx(dp: Int): Int {
+            return (dp * Resources.getSystem().displayMetrics.density).toInt()
+        }
+
+        private fun Drawable.toBitmap(): Bitmap? {
+            return if (this is BitmapDrawable) {
+                bitmap
             } else {
-                val distance = DistanceCalculator.instance(latitude = location.latitude())
-                    .distance(location, destination)
-                callback(distance)
+                // copying drawable object to not manipulate on the same reference
+                val constantState = constantState ?: return null
+                val drawable = constantState.newDrawable().mutate()
+                val bitmap: Bitmap = Bitmap.createBitmap(
+                    drawable.intrinsicWidth,
+                    drawable.intrinsicHeight,
+                    Bitmap.Config.ARGB_8888,
+                )
+                val canvas = Canvas(bitmap)
+                drawable.setBounds(0, 0, canvas.width, canvas.height)
+                drawable.draw(canvas)
+                bitmap
             }
         }
-    }
 
-    /**
-     * Hide input keyboard.
-     */
-    fun View.hideKeyboard() {
-        context.inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
-    }
+        /**
+         * Get last known location from the [LocationEngine].
+         */
+        @SuppressLint("MissingPermission")
+        fun LocationEngine.lastKnownLocation(context: Context, callback: (Point?) -> Unit) {
+            if (!PermissionsManager.areLocationPermissionsGranted(context)) {
+                callback(null)
+            }
 
-    /**
-     * Show a toast message using a resource string [resId].
-     */
-    fun Context.showToast(@StringRes resId: Int) {
-        showToast(getString(resId))
-    }
+            getLastLocation(object : LocationEngineCallback<LocationEngineResult> {
+                override fun onSuccess(result: LocationEngineResult?) {
+                    val location =
+                        (result?.locations?.lastOrNull() ?: result?.lastLocation)?.let { location ->
+                            Point.fromLngLat(location.longitude, location.latitude)
+                        }
+                    callback(location)
+                }
 
-    /**
-     * Get a bitmap from a drawable [resourceId].
-     */
-    fun Context.bitmapFromDrawableRes(@DrawableRes resourceId: Int): Bitmap? {
-        return AppCompatResources.getDrawable(this, resourceId)?.toBitmap()
-    }
-
-    /**
-     * Get camera bounding box coordinate points
-     *
-     * see https://docs.mapbox.com/help/glossary/bounding-box/
-     */
-    fun MapboxMap.getCameraBoundingBox(): BoundingBox {
-        val bounds = coordinateBoundsForCamera(cameraState.toCameraOptions())
-        return BoundingBox.fromPoints(bounds.southwest, bounds.northeast)
-    }
-
-    fun geoIntent(point: Point): Intent {
-        return Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("geo:0,0?q=${point.latitude()}, ${point.longitude()}"),
-        )
-    }
-
-    fun shareIntent(searchPlace: SearchPlace): Intent {
-        val text = "${searchPlace.name}. " +
-            "Address: ${searchPlace.address?.formattedAddress(SearchAddress.FormatStyle.Short) ?: "unknown"}. " +
-            "Geo coordinate: (lat=${searchPlace.coordinate.latitude()}, lon=${searchPlace.coordinate.longitude()})"
-
-        return Intent().apply {
-            action = Intent.ACTION_SEND
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, text)
+                override fun onFailure(exception: Exception) {
+                    callback(null)
+                }
+            })
         }
-    }
 
-    /**
-     * Search a place
-     */
-    fun DiscoverResult.toSearchPlace(): SearchPlace {
-        return SearchPlace(
-            id = name + UUID.randomUUID().toString(),
-            name = name,
-            descriptionText = null,
-            address = address.toSearchAddress(),
-            resultTypes = listOf(SearchResultType.POI),
-            record = null,
-            coordinate = coordinate,
-            routablePoints = routablePoints,
-            categories = categories,
-            makiIcon = makiIcon,
-            metadata = null,
-            distanceMeters = null,
-            feedback = null,
-        )
+        /**
+         * Get user distance to the [destination].
+         */
+        fun LocationEngine.userDistanceTo(
+            context: Context,
+            destination: Point,
+            callback: (Double?) -> Unit,
+        ) {
+            lastKnownLocation(context) { location ->
+                if (location == null) {
+                    callback(null)
+                } else {
+                    val distance = DistanceCalculator.instance(latitude = location.latitude())
+                        .distance(location, destination)
+                    callback(distance)
+                }
+            }
+        }
+
+        /**
+         * Get a bitmap from a drawable [resourceId].
+         */
+        fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int): Bitmap? {
+            return AppCompatResources.getDrawable(context, resourceId)?.toBitmap()
+        }
+
+        /**
+         * Get camera bounding box coordinate points
+         *
+         * see https://docs.mapbox.com/help/glossary/bounding-box/
+         */
+        fun MapboxMap.getCameraBoundingBox(): BoundingBox {
+            val bounds = coordinateBoundsForCamera(cameraState.toCameraOptions())
+            return BoundingBox.fromPoints(bounds.southwest, bounds.northeast)
+        }
     }
 }
+
