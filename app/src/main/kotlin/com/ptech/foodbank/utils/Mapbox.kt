@@ -41,11 +41,17 @@ object Mapbox {
     private val PLACE_CARD_HEIGHT = dpToPx(300).toDouble()
 
     val MARKERS_INSETS = EdgeInsets(
-        MARKERS_EDGE_OFFSET, MARKERS_EDGE_OFFSET, MARKERS_BOTTOM_OFFSET, MARKERS_EDGE_OFFSET
+        MARKERS_EDGE_OFFSET,
+        MARKERS_EDGE_OFFSET,
+        MARKERS_BOTTOM_OFFSET,
+        MARKERS_EDGE_OFFSET,
     )
 
     val MARKERS_INSETS_OPEN_CARD = EdgeInsets(
-        MARKERS_EDGE_OFFSET, MARKERS_EDGE_OFFSET, PLACE_CARD_HEIGHT, MARKERS_EDGE_OFFSET
+        MARKERS_EDGE_OFFSET,
+        MARKERS_EDGE_OFFSET,
+        PLACE_CARD_HEIGHT,
+        MARKERS_EDGE_OFFSET,
     )
 
     private fun dpToPx(dp: Int): Int {
@@ -69,7 +75,7 @@ object Mapbox {
             place = place,
             district = district,
             region = region,
-            country = country
+            country = country,
         )
     }
 
@@ -81,8 +87,9 @@ object Mapbox {
             val constantState = constantState ?: return null
             val drawable = constantState.newDrawable().mutate()
             val bitmap: Bitmap = Bitmap.createBitmap(
-                drawable.intrinsicWidth, drawable.intrinsicHeight,
-                Bitmap.Config.ARGB_8888
+                drawable.intrinsicWidth,
+                drawable.intrinsicHeight,
+                Bitmap.Config.ARGB_8888,
             )
             val canvas = Canvas(bitmap)
             drawable.setBounds(0, 0, canvas.width, canvas.height)
@@ -121,7 +128,7 @@ object Mapbox {
     fun LocationEngine.userDistanceTo(
         context: Context,
         destination: Point,
-        callback: (Double?) -> Unit
+        callback: (Double?) -> Unit,
     ) {
         lastKnownLocation(context) { location ->
             if (location == null) {
@@ -140,6 +147,7 @@ object Mapbox {
     fun View.hideKeyboard() {
         context.inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
+
     /**
      * Show a toast message using a resource string [resId].
      */
@@ -147,14 +155,12 @@ object Mapbox {
         showToast(getString(resId))
     }
 
-
     /**
      * Get a bitmap from a drawable [resourceId].
      */
     fun Context.bitmapFromDrawableRes(@DrawableRes resourceId: Int): Bitmap? {
         return AppCompatResources.getDrawable(this, resourceId)?.toBitmap()
     }
-
 
     /**
      * Get camera bounding box coordinate points
@@ -169,7 +175,7 @@ object Mapbox {
     fun geoIntent(point: Point): Intent {
         return Intent(
             Intent.ACTION_VIEW,
-            Uri.parse("geo:0,0?q=${point.latitude()}, ${point.longitude()}")
+            Uri.parse("geo:0,0?q=${point.latitude()}, ${point.longitude()}"),
         )
     }
 

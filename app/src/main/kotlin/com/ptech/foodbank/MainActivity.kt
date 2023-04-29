@@ -36,9 +36,9 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.CALL_PHONE
+                    Manifest.permission.CALL_PHONE,
                 ),
-                PERMISSIONS_CODE
+                PERMISSIONS_CODE,
             )
         }
     }

@@ -15,8 +15,9 @@ class LocationPermissionHelper(val activity: WeakReference<Activity>) {
             permissionsManager = PermissionsManager(object : PermissionsListener {
                 override fun onExplanationNeeded(permissionsToExplain: List<String>) {
                     Toast.makeText(
-                        activity.get(), "You need to accept location permissions.",
-                        Toast.LENGTH_SHORT
+                        activity.get(),
+                        "You need to accept location permissions.",
+                        Toast.LENGTH_SHORT,
                     ).show()
                 }
 
@@ -35,7 +36,7 @@ class LocationPermissionHelper(val activity: WeakReference<Activity>) {
     fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }

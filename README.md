@@ -8,16 +8,16 @@ A simple food bank application that allows users to donate food to the food bank
 
 > https://account.mapbox.com/access-tokens/ | https://docs.mapbox.com/android/maps/guides/install/
 
-- A public access token: From your account's tokens page, you can either copy your default public
-  token or click the Create a token button to create a new public token.
+-   A public access token: From your account's tokens page, you can either copy your default public
+    token or click the Create a token button to create a new public token.
 
-- A secret access token with the `Downloads:Read` scope.
-    - From your account's tokens page, click the Create a token button.
-    - From the token creation page, give your token a name and make sure the box next to the
-      `Downloads:Read` scope is checked.
-    - Click the Create token button at the bottom of the page to create your token.
-    - The token you've created is a secret token, which means you will only have one opportunity to
-      copy it somewhere secure.
+-   A secret access token with the `Downloads:Read` scope.
+    -   From your account's tokens page, click the Create a token button.
+    -   From the token creation page, give your token a name and make sure the box next to the
+        `Downloads:Read` scope is checked.
+    -   Click the Create token button at the bottom of the page to create your token.
+    -   The token you've created is a secret token, which means you will only have one opportunity to
+        copy it somewhere secure.
 
 #### Configure your secret token
 
@@ -55,9 +55,9 @@ R.strings.xml file.
 
 **Uses:**
 
-- Firestore
-- Crashlytics
-- Performance
+-   Firestore
+-   Crashlytics
+-   Performance
 
 Download `google-services.json` from firebase console's project settings, and copy it the the
 project directory

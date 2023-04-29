@@ -5,8 +5,8 @@ import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.GeoPoint
 import com.mapbox.geojson.Point
@@ -19,7 +19,6 @@ import com.mapbox.search.result.SearchResult
 import com.ptech.foodbank.R
 import com.ptech.foodbank.utils.Coil.imageLoader
 import com.ptech.foodbank.utils.Coil.imageRequest
-
 
 class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
@@ -48,14 +47,14 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         // init mapbox search api engine
         val searchEngine = SearchEngine.createSearchEngine(
             SearchEngineSettings(
-                view.context.getString(R.string.mapbox_access_token)
-            )
+                view.context.getString(R.string.mapbox_access_token),
+            ),
         )
 
         // reverse geocoding, get address from geo point
         val options = ReverseGeoOptions(
             center = Point.fromLngLat(address.longitude, address.latitude),
-            limit = 1
+            limit = 1,
         )
 
         // response callback, handles result/error
@@ -85,7 +84,6 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     fun setBankActionCall(phone: String) {
         val callIntent = Intent(Intent.ACTION_DIAL)
         callIntent.data = Uri.parse(phone)
-
 
         val callView = view.findViewById<View>(R.id.bank_action_call)
         callView.setOnClickListener {

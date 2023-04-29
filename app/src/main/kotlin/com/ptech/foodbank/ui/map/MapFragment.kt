@@ -10,30 +10,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mapbox.android.core.location.LocationEngine
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
-import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.gestures.OnMoveListener
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location
-import com.mapbox.maps.plugin.annotation.annotations
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
-import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.ptech.foodbank.R
 import java.lang.ref.WeakReference
 class MapFragment : Fragment() {
-
 
     private lateinit var locationPermissionHelper: LocationPermissionHelper
 
@@ -60,7 +56,11 @@ class MapFragment : Fragment() {
 
     private lateinit var mapView: MapView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
         mapView = view.findViewById(R.id.map_view)
@@ -73,7 +73,7 @@ class MapFragment : Fragment() {
                         onMapReady()
                         addAnnotationsToMap()
                     }
-                }
+                },
             )
         }
 
@@ -83,11 +83,11 @@ class MapFragment : Fragment() {
     private fun onMapReady() {
         mapView.getMapboxMap().setCamera(
             CameraOptions.Builder()
-                .zoom(15.0  )
-                .build()
+                .zoom(15.0)
+                .build(),
         )
         mapView.getMapboxMap()?.loadStyleUri(
-            Style.MAPBOX_STREETS
+            Style.MAPBOX_STREETS,
         ) {
             initLocationComponent()
             setupGesturesListener()
@@ -104,17 +104,22 @@ class MapFragment : Fragment() {
             pulsingEnabled = true
         }
         if (locationComponentPlugin != null) {
-            locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+            locationComponentPlugin.addOnIndicatorPositionChangedListener(
+                onIndicatorPositionChangedListener,
+            )
         }
         if (locationComponentPlugin != null) {
-            locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
+            locationComponentPlugin.addOnIndicatorBearingChangedListener(
+                onIndicatorBearingChangedListener,
+            )
         }
     }
 
-
     private fun onCameraTrackingDismissed() {
-        //Toast.makeText(requireContext(), "onCameraTrackingDismissed", Toast.LENGTH_SHORT).show()
-        mapView.location?.removeOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener)
+        // Toast.makeText(requireContext(), "onCameraTrackingDismissed", Toast.LENGTH_SHORT).show()
+        mapView.location?.removeOnIndicatorPositionChangedListener(
+            onIndicatorPositionChangedListener,
+        )
         mapView.location?.removeOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener)
         mapView.gestures?.removeOnMoveListener(onMoveListener)
     }
@@ -124,7 +129,7 @@ class MapFragment : Fragment() {
         // Create an instance of the Annotation API and get the PointAnnotationManager.
         bitmapFromDrawableRes(
             requireContext(),
-            R.drawable.baseline_red_marker_24
+            R.drawable.baseline_red_marker_24,
         )?.let {
             val annotationApi = mapView.annotations
             val pointAnnotationManager = annotationApi?.createPointAnnotationManager(mapView!!)
@@ -173,8 +178,9 @@ class MapFragment : Fragment() {
             val constantState = sourceDrawable.constantState ?: return null
             val drawable = constantState.newDrawable().mutate()
             val bitmap: Bitmap = Bitmap.createBitmap(
-                drawable.intrinsicWidth, drawable.intrinsicHeight,
-                Bitmap.Config.ARGB_8888
+                drawable.intrinsicWidth,
+                drawable.intrinsicHeight,
+                Bitmap.Config.ARGB_8888,
             )
             val canvas = Canvas(bitmap)
             drawable.setBounds(0, 0, canvas.width, canvas.height)

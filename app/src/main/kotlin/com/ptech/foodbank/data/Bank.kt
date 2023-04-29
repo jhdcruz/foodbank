@@ -27,4 +27,3 @@ data class Bank(
         timeClosing = 0,
     )
 }
-

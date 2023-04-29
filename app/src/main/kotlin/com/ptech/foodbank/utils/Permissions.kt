@@ -13,7 +13,7 @@ object Permissions {
     fun Context.isPermissionGranted(permission: String): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
-            permission
+            permission,
         ) == PackageManager.PERMISSION_GRANTED
     }
 }
