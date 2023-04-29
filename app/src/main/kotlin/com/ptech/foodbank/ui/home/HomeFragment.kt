@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
         val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root = binding.root
+        val view = binding.root
 
         banksRecyclerView = binding.bankList
         banksRecyclerView?.layoutManager =
@@ -37,11 +37,11 @@ class HomeFragment : Fragment() {
         homeViewModel.savedBanks.observe(viewLifecycleOwner) {
             if (it != null) {
                 banksList = it.toObjects(Bank::class.java)
-                banksRecyclerView?.adapter = BankRecyclerAdapter(banksList as MutableList<Bank>)
+                banksRecyclerView?.adapter = BankRecyclerAdapter(banksList as List<Bank>)
             }
         }
 
-        return root
+        return view
     }
 
     override fun onDestroyView() {
