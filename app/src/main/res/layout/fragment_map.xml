@@ -10,8 +10,7 @@
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:mapbox_cameraZoom="2.0"
-        app:mapbox_logoGravity="bottom" />
+        app:mapbox_logoGravity="top|start" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_current_location"
@@ -22,22 +21,5 @@
         android:contentDescription="@string/get_current_location"
         android:elevation="@dimen/default_card_elevation"
         app:srcCompat="@drawable/baseline_location_searching_24" />
-
-
-    <!-- Mapbox Search UI -->
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinator_layout_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="@dimen/default_card_elevation">
-
-        <com.mapbox.search.ui.view.place.SearchPlaceBottomSheetView
-            android:id="@+id/search_place_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:elevation="@dimen/default_card_elevation" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
