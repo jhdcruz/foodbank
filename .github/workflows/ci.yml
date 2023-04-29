@@ -1,7 +1,6 @@
 name: ci
 
 on:
-  workflow_dispatch:
   pull_request:
     branches:
       - main
@@ -9,12 +8,11 @@ on:
     branches:
       - main
     paths-ignore:
-      - "**.md"
-      - "**.txt"
-      - "**.json"
-      - ".gitignore"
+      - ./*.md
+      - ./*.txt
+      - .gitignore
     tags-ignore:
-      - "*"
+      - *
 
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-XX:MaxMetaspaceSize=2g"

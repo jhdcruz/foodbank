@@ -7,6 +7,9 @@ import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.request.ImageRequest
 
+const val MEMORY_CACHE = 0.25
+const val DISK_CACHE = 0.05
+
 /**
  * Coil image loading library utilities
  *
@@ -17,13 +20,13 @@ object Coil {
         return ImageLoader.Builder(context)
             .memoryCache {
                 MemoryCache.Builder(context)
-                    .maxSizePercent(0.25)
+                    .maxSizePercent(MEMORY_CACHE)
                     .build()
             }
             .diskCache {
                 DiskCache.Builder()
                     .directory(context.cacheDir.resolve("image_cache"))
-                    .maxSizePercent(0.05)
+                    .maxSizePercent(DISK_CACHE)
                     .build()
             }
             .build()

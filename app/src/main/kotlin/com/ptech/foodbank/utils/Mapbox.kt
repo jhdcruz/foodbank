@@ -113,6 +113,7 @@ class Mapbox(private val mapView: MapView) {
             return (dp * Resources.getSystem().displayMetrics.density).toInt()
         }
 
+        @Suppress("MagicNumber")
         private fun Drawable.toBitmap(): Bitmap? {
             return if (this is BitmapDrawable) {
                 bitmap
@@ -126,6 +127,7 @@ class Mapbox(private val mapView: MapView) {
                     Bitmap.Config.ARGB_8888,
                 )
                 val canvas = Canvas(bitmap)
+
                 drawable.setBounds(0, 0, canvas.width, canvas.height)
                 drawable.draw(canvas)
                 bitmap
