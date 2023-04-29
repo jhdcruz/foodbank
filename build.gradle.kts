@@ -13,7 +13,7 @@ buildscript {
 plugins {
     id("com.android.application") version "8.1.0-beta01" apply false
     id("org.jetbrains.kotlin.android") version "1.8.21" apply false
-    id("io.gitlab.arturbosch.detekt").version("1.23.0-RC2")
+    id("io.gitlab.arturbosch.detekt").version("1.23.0-RC3")
 }
 
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
