@@ -44,7 +44,8 @@ jobs:
           MAPBOX_API_CREDS: ${{ secrets.MAPBOX_API_CREDS }}
         run: |
           echo $GOOGLE_SERVICES_JSON > ./app/google-services.json
-          echo $MAPBOX_API_CREDS >> ~/.gradle/gradle.properties
+          mkdir -p ~/.gradle
+          echo $MAPBOX_API_CREDS > ~/.gradle/gradle.properties
 
       - name: Test with JDK ${{ env.JDK_VERSION }}
         uses: gradle/gradle-build-action@v2
