@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.ptech.foodbank.data.Bank
 import com.ptech.foodbank.databinding.FragmentHomeBinding
 
@@ -20,6 +21,8 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
 
     private lateinit var refresher: SwipeRefreshLayout
+    private lateinit var loader: CircularProgressIndicator
+
     private var banksRecyclerView: RecyclerView? = null
     private var banksList: List<Bank>? = null
 
@@ -43,6 +46,10 @@ class HomeFragment : Fragment() {
             getData()
         }
 
+        // Show loading progress indicator
+        loader = binding.progressIndicator
+        loader.show()
+
         return view
     }
 
@@ -58,6 +65,7 @@ class HomeFragment : Fragment() {
                 banksList = it.toObjects(Bank::class.java)
                 banksRecyclerView?.adapter = BankRecyclerAdapter(banksList as List<Bank>)
 
+                loader.hide()
                 refresher.isRefreshing = false
             }
         }
