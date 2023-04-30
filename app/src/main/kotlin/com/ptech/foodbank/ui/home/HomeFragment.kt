@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ptech.foodbank.data.Bank
 import com.ptech.foodbank.databinding.FragmentHomeBinding
 
@@ -16,6 +17,9 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var homeViewModel: HomeViewModel
+
+    private lateinit var refresher: SwipeRefreshLayout
     private var banksRecyclerView: RecyclerView? = null
     private var banksList: List<Bank>? = null
 
@@ -24,24 +28,39 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        val homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
         val view = binding.root
 
         banksRecyclerView = binding.bankList
         banksRecyclerView?.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
-        // get and observe banks list
+        // pull-to-refresh feature
+        refresher = binding.swipeRefresh
+        refresher.setOnRefreshListener {
+            getData()
+        }
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getData()
+    }
+
+    private fun getData() {
+        // get banks list
         homeViewModel.savedBanks.observe(viewLifecycleOwner) {
             if (it != null) {
                 banksList = it.toObjects(Bank::class.java)
                 banksRecyclerView?.adapter = BankRecyclerAdapter(banksList as List<Bank>)
+
+                refresher.isRefreshing = false
             }
         }
-
-        return view
     }
 
     override fun onDestroyView() {
