@@ -1,5 +1,6 @@
 package com.ptech.foodbank.ui.home
 
+import android.app.SearchManager
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -81,8 +82,10 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun setBankActionCall(phone: String) {
-        val callIntent = Intent(Intent.ACTION_DIAL)
-        callIntent.data = Uri.parse(phone)
+        val callIntent = Intent(Intent.ACTION_CALL).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            data = Uri.parse("tel:$phone")
+        }
 
         val callView = view.findViewById<View>(R.id.bank_action_call)
         callView.setOnClickListener {
@@ -91,8 +94,10 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun setBankActionWeb(website: String) {
-        val webIntent = Intent(Intent.ACTION_WEB_SEARCH)
-        webIntent.data = Uri.parse("https://$website")
+        val webIntent = Intent(Intent.ACTION_WEB_SEARCH).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            putExtra(SearchManager.QUERY, website)
+        }
 
         val webButton = view.findViewById<View>(R.id.bank_action_web)
         webButton.setOnClickListener {
