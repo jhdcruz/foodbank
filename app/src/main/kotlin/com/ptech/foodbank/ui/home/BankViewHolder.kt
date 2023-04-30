@@ -15,6 +15,7 @@ import com.mapbox.search.ReverseGeoOptions
 import com.mapbox.search.SearchCallback
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
+import com.mapbox.search.common.IsoCountryCode
 import com.mapbox.search.result.SearchResult
 import com.ptech.foodbank.R
 import com.ptech.foodbank.utils.Coil.imageLoader
@@ -55,21 +56,19 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val options = ReverseGeoOptions(
             center = Point.fromLngLat(address.longitude, address.latitude),
             limit = 1,
+            countries = listOf(IsoCountryCode.PHILIPPINES),
         )
 
         // response callback, handles result/error
         val searchCallback = object : SearchCallback {
             override fun onResults(results: List<SearchResult>, responseInfo: ResponseInfo) {
-                if (results.isEmpty()) {
-                    Log.i("SearchApiExample", "No reverse geocoding results")
-                } else {
+                if (results.isNotEmpty()) {
                     textView.text = results[0].fullAddress
                 }
             }
 
             override fun onError(e: Exception) {
-                textView.text = ""
-                Log.i("SearchApiExample", "Reverse geocoding error", e)
+                Log.i("BankViewHolder", "Reverse geocoding error", e)
             }
         }
 
