@@ -34,7 +34,8 @@ allprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     dependencies {
-        detektPlugins(libs.detekt.formatting)
+        @Suppress("UseTomlInstead")
+        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
     }
 
     detekt {
