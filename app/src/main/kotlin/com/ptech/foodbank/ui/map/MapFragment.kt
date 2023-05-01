@@ -15,6 +15,9 @@ import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
 import com.ptech.foodbank.utils.Mapbox
 import com.ptech.foodbank.utils.Mapbox.Utils.bitmapFromDrawableRes
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MapFragment : Fragment() {
 
@@ -44,30 +47,38 @@ class MapFragment : Fragment() {
             mapBox.initLocationComponent()
             mapBox.setupGesturesListener()
 
-            addAnnotationsToMap()
+            runBlocking {
+                addAnnotationsToMap()
+            }
         }
 
         return view
     }
 
-    private fun addAnnotationsToMap() {
-        val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
-        val pointAnnotationOptions = PointAnnotationOptions()
+    /**
+     * Add annotations (markers) to the map
+     * using the data fetched from firestore asynchronously
+     */
+    private suspend fun addAnnotationsToMap() = coroutineScope {
+        launch {
+            val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
+            val pointAnnotationOptions = PointAnnotationOptions()
 
-        val pinMarker = bitmapFromDrawableRes(
-            requireContext(),
-            R.drawable.baseline_red_marker_24,
-        )
+            val pinMarker = bitmapFromDrawableRes(
+                requireContext(),
+                R.drawable.baseline_red_marker_24,
+            )
 
-        // get locations from firebase
-        mapViewModel.availableBanks().observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                for (coordinate in it) {
-                    pointAnnotationOptions
-                        .withPoint(coordinate)
-                        .withIconImage(pinMarker!!)
+            // get locations from firebase
+            mapViewModel.availableBanks().observe(viewLifecycleOwner) {
+                if (it.isNotEmpty()) {
+                    for (coordinate in it) {
+                        pointAnnotationOptions
+                            .withPoint(coordinate)
+                            .withIconImage(pinMarker!!)
 
-                    pointAnnotationManager.create(pointAnnotationOptions)
+                        pointAnnotationManager.create(pointAnnotationOptions)
+                    }
                 }
             }
         }
