@@ -16,7 +16,6 @@ import com.ptech.foodbank.databinding.FragmentMapBinding
 import com.ptech.foodbank.utils.Mapbox
 import com.ptech.foodbank.utils.Mapbox.Utils.bitmapFromDrawableRes
 
-
 class MapFragment : Fragment() {
 
     private var _binding: FragmentMapBinding? = null
@@ -63,7 +62,6 @@ class MapFragment : Fragment() {
         // get locations from firebase
         mapViewModel.availableBanks().observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
-
                 for (coordinate in it) {
                     pointAnnotationOptions
                         .withPoint(coordinate)

@@ -32,7 +32,12 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 [bundles]
-firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-firestore", "firebase-perf"]
+firebase = [
+  "firebase-analytics",
+  "firebase-crashlytics",
+  "firebase-firestore",
+  "firebase-perf",
+]
 lifecycle = ["lifecycle-livedata", "lifecycle-runtime", "lifecycle-viewmodel"]
 mapbox = ["mapbox", "mapbox-discover", "mapbox-search"]
 navigation = ["navigation-fragment", "navigation-ui"]

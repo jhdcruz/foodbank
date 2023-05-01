@@ -38,7 +38,7 @@ class Mapbox(private val mapView: MapView) {
         mapView.getMapboxMap().setCamera(
             CameraOptions.Builder()
                 .bearing(it)
-                .build()
+                .build(),
         )
     }
 
@@ -47,7 +47,7 @@ class Mapbox(private val mapView: MapView) {
             CameraOptions.Builder()
                 .center(it)
                 .zoom(16.0)
-                .build()
+                .build(),
         )
 
         mapView.gestures.focalPoint = mapView.getMapboxMap().pixelForCoordinate(it)
@@ -195,4 +195,3 @@ class Mapbox(private val mapView: MapView) {
         }
     }
 }
-
