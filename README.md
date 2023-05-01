@@ -38,7 +38,7 @@ mapboxPassword=YOUR_SECRET_MAPBOX_ACCESS_TOKEN
 
 #### Configure your public token
 
-open the project's `values/strings.xml` file and add the following string resource, replacing
+open the project's `values/dev.xml` file and add the following string resource, replacing
 `YOUR_MAPBOX_ACCESS_TOKEN` with your public Mapbox API token:
 
 ```xml

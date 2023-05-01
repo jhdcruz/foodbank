@@ -2,7 +2,6 @@ package com.ptech.foodbank.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -14,18 +13,17 @@ import com.mapbox.android.core.location.LocationEngineCallback
 import com.mapbox.android.core.location.LocationEngineResult
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.android.gestures.MoveGestureDetector
-import com.mapbox.geojson.BoundingBox
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
-import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.plugin.gestures.OnMoveListener
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorBearingChangedListener
 import com.mapbox.maps.plugin.locationcomponent.OnIndicatorPositionChangedListener
 import com.mapbox.maps.plugin.locationcomponent.location2
-import com.mapbox.maps.toCameraOptions
 import com.mapbox.search.common.DistanceCalculator
+
+private const val DEFAULT_CAMERA_ZOOM = 16.0
 
 /**
  * Mapbox SDK integration helper
@@ -46,7 +44,7 @@ class Mapbox(private val mapView: MapView) {
         mapView.getMapboxMap().setCamera(
             CameraOptions.Builder()
                 .center(it)
-                .zoom(16.0)
+                .zoom(DEFAULT_CAMERA_ZOOM)
                 .build(),
         )
 
@@ -109,9 +107,6 @@ class Mapbox(private val mapView: MapView) {
      * Mapbox-specific utility functions
      */
     companion object Utils {
-        private fun dpToPx(dp: Int): Int {
-            return (dp * Resources.getSystem().displayMetrics.density).toInt()
-        }
 
         @Suppress("MagicNumber")
         private fun Drawable.toBitmap(): Bitmap? {
@@ -182,16 +177,6 @@ class Mapbox(private val mapView: MapView) {
          */
         fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int): Bitmap? {
             return AppCompatResources.getDrawable(context, resourceId)?.toBitmap()
-        }
-
-        /**
-         * Get camera bounding box coordinate points
-         *
-         * see https://docs.mapbox.com/help/glossary/bounding-box/
-         */
-        fun MapboxMap.getCameraBoundingBox(): BoundingBox {
-            val bounds = coordinateBoundsForCamera(cameraState.toCameraOptions())
-            return BoundingBox.fromPoints(bounds.southwest, bounds.northeast)
         }
     }
 }
