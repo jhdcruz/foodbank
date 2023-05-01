@@ -42,10 +42,12 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
           MAPBOX_API_CREDS: ${{ secrets.MAPBOX_API_CREDS }}
+          MAPBOX_PUBLIC_KEY: ${{ secrets.MAPBOX_PUBLIC_KEY }}
         run: |
           echo $GOOGLE_SERVICES_JSON > ./app/google-services.json
           mkdir -p ~/.gradle
           echo $MAPBOX_API_CREDS > ~/.gradle/gradle.properties
+          echo $MAPBOX_PUBLIC_KEY > ./app/src/main/res/values/dev.xml
 
       - name: Test with JDK ${{ env.JDK_VERSION }}
         uses: gradle/gradle-build-action@v2
@@ -67,7 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Gradle dependency submission
-        uses: mikepenz/gradle-dependency-submission@v0.8.6
+        uses: mikepenz/gradle-dependency-submission@main
         with:
           gradle-build-module: :app
 
