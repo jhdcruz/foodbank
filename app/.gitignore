@@ -1,1 +1,4 @@
 /build
+
+# reources files
+src/main/res/values/dev.xml

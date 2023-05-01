@@ -4,9 +4,6 @@
 .gradle/
 build/
 
-# reources files
-app/src/main/res/values/dev.xml
-
 # Local configuration file (sdk path, etc)
 local.properties
 
