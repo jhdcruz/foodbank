@@ -4,16 +4,16 @@ import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 buildscript {
     dependencies {
-        classpath("com.android.tools.build:gradle:8.1.0-beta01")
-        classpath("com.google.gms:google-services:4.3.15")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.5")
-        classpath("com.google.firebase:perf-plugin:1.4.2")
+        classpath(libs.gradle)
+        classpath(libs.google.services.gradle)
+        classpath(libs.firebase.crashlytics.gradle)
+        classpath(libs.perf.plugin.gradle)
     }
 }
 plugins {
-    id("com.android.application") version "8.1.0-beta01" apply false
-    id("org.jetbrains.kotlin.android") version "1.8.21" apply false
-    id("io.gitlab.arturbosch.detekt").version("1.23.0-RC3")
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.detekt)
 }
 
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
@@ -34,7 +34,7 @@ allprojects {
     apply(plugin = "io.gitlab.arturbosch.detekt")
 
     dependencies {
-        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
+        detektPlugins(libs.detekt.formatting)
     }
 
     detekt {
