@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
@@ -28,6 +30,8 @@ class MapFragment : Fragment() {
     private lateinit var mapView: MapView
     private lateinit var mapViewModel: MapViewModel
 
+    private lateinit var fab: FloatingActionButton
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,14 +42,19 @@ class MapFragment : Fragment() {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        fab = binding.fabCurrentLocation
+
         mapView = binding.mapView
         mapBox = Mapbox(mapView)
 
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS,
         ) {
-            mapBox.initLocationComponent()
+            // HACK: hacky way of getting and centering on user location
+            //       then disabling user tracking
             mapBox.setupGesturesListener()
+            mapBox.initLocationComponent()
+            mapBox.onCameraTrackingDismissed()
 
             runBlocking {
                 addAnnotationsToMap()
@@ -53,6 +62,39 @@ class MapFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        var isTracking = false
+
+        fab.setOnClickListener {
+            isTracking = if (!isTracking) {
+                mapBox.setupGesturesListener()
+                mapBox.initLocationComponent()
+
+                Toast.makeText(
+                    requireContext(),
+                    "User tracking enabled",
+                    Toast.LENGTH_SHORT,
+                ).show()
+                fab.setImageResource(R.drawable.baseline_location_searching_24)
+
+                true
+            } else {
+                mapBox.onCameraTrackingDismissed()
+
+                Toast.makeText(
+                    requireContext(),
+                    "User tracking disabled",
+                    Toast.LENGTH_SHORT,
+                ).show()
+                fab.setImageResource(R.drawable.baseline_location_24)
+
+                false
+            }
+        }
     }
 
     /**

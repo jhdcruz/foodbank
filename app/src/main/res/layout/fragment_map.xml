@@ -20,6 +20,6 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/get_current_location"
         android:elevation="@dimen/default_card_elevation"
-        app:srcCompat="@drawable/baseline_location_searching_24" />
+        app:srcCompat="@drawable/baseline_location_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
