@@ -1,69 +1,69 @@
 [versions]
-coil = "2.3.0"
-core = "1.10.0"
 appcompat = "1.6.1"
+coil = "2.3.0"
 constraintlayout = "2.1.4"
+core = "1.10.0"
+coroutines = "1.7.0-RC"
+detekt = "1.23.0-RC3"
 espressoCore = "3.5.1"
 firebaseAnalytics = "21.2.2"
 firebaseCrashlytics = "18.3.6"
 firebaseCrashlyticsGradle = "2.9.5"
-firebasePerf = "20.3.1"
 firebaseFirestore = "24.5.0"
-gradleVersion = "8.1.0-beta01"
+firebasePerf = "20.3.1"
 googleServices = "4.3.15"
-junitVersion = "1.1.5"
+gradleVersion = "8.1.0-beta01"
 junit = "4.13.2"
+junitVersion = "1.1.5"
 kotlin = "1.8.21"
-detekt = "1.23.0-RC3"
+lifecycle = "2.6.1"
 mapbox = "10.12.2"
 mapboxSdk = "1.0.0-rc.3"
-coroutines = "1.7.0-RC"
 materialUi = "1.8.0"
-lifecycle = "2.6.1"
 navigationUi = "2.5.3"
 perfPlugin = "1.4.2"
-swiperefreshlayout = "1.1.0"
 playServicesLocation = "21.0.1"
 recyclerview = "1.3.0"
+swiperefreshlayout = "1.1.0"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "gradleVersion" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+[bundles]
+firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-firestore", "firebase-perf"]
+lifecycle = ["lifecycle-livedata", "lifecycle-runtime", "lifecycle-viewmodel"]
+mapbox = ["mapbox", "mapbox-discover", "mapbox-search"]
+navigation = ["navigation-fragment", "navigation-ui"]
+test-extensions = ["ext-junit", "espresso-core"]
 
 [libraries]
-mapbox = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
-mapbox-discover = { module = "com.mapbox.search:discover", version.ref = "mapboxSdk" }
-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "core" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 ext-junit = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
-firebase-perf = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebasePerf" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx", version.ref = "firebaseFirestore" }
-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradleVersion" }
+firebase-perf = { module = "com.google.firebase:firebase-perf-ktx", version.ref = "firebasePerf" }
 google-services-gradle = { module = "com.google.gms:google-services", version.ref = "googleServices" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradleVersion" }
 junit = { module = "junit:junit", version.ref = "junit" }
-mapbox-search = { module = "com.mapbox.search:mapbox-search-android", version.ref = "mapboxSdk" }
-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
-material-ui = { module = "com.google.android.material:material", version.ref = "materialUi" }
 lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+mapbox = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
+mapbox-discover = { module = "com.mapbox.search:discover", version.ref = "mapboxSdk" }
+mapbox-search = { module = "com.mapbox.search:mapbox-search-android", version.ref = "mapboxSdk" }
+material-ui = { module = "com.google.android.material:material", version.ref = "materialUi" }
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationUi" }
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUi" }
 perf-plugin-gradle = { module = "com.google.firebase:perf-plugin", version.ref = "perfPlugin" }
-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
-
-[plugins]
-android-application = { id = "com.android.application", version.ref = "gradleVersion" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-
-[bundles]
-navigation = ["navigation-fragment", "navigation-ui"]
-lifecycle = ["lifecycle-livedata", "lifecycle-runtime", "lifecycle-viewmodel"]
-mapbox = ["mapbox", "mapbox-discover", "mapbox-search"]
-firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-firestore", "firebase-perf"]
-test-extensions = ["ext-junit", "espresso-core"]
+swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
