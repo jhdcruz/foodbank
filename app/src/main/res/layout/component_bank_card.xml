@@ -1,6 +1,5 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card"
     style="?attr/materialCardViewElevatedStyle"
     android:layout_width="match_parent"
@@ -70,9 +69,11 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/bank_action_direction"
                 style="?attr/materialButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/default_button_height"
+                android:layout_weight="1"
                 android:text="@string/directions"
                 app:icon="@drawable/baseline_map_24" />
 
