@@ -1,14 +1,14 @@
 package com.ptech.foodbank.ui.home
 
-import android.app.SearchManager
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.firestore.GeoPoint
 import com.mapbox.geojson.Point
 import com.mapbox.search.ResponseInfo
@@ -21,6 +21,9 @@ import com.mapbox.search.result.SearchResult
 import com.ptech.foodbank.R
 import com.ptech.foodbank.utils.Coil.imageLoader
 import com.ptech.foodbank.utils.Coil.imageRequest
+
+private const val CAPACITY_STABLE = 5
+private const val CAPACITY_HIGH = 7
 
 class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
@@ -39,8 +42,23 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun setBankCapacity(capacity: Int) {
-        val capacityBar = view.findViewById<ProgressBar>(R.id.bank_capacity)
+        val capacityBar = view.findViewById<LinearProgressIndicator>(R.id.bank_capacity)
         capacityBar.progress = capacity
+
+        // change color based on capacity
+        when {
+            capacity <= CAPACITY_STABLE -> {
+                capacityBar.setIndicatorColor(view.context.getColor(R.color.green))
+            }
+
+            capacity <= CAPACITY_HIGH -> {
+                capacityBar.setIndicatorColor(view.context.getColor(R.color.yellow))
+            }
+
+            else -> {
+                capacityBar.setIndicatorColor(view.context.getColor(R.color.red))
+            }
+        }
     }
 
     fun setBankAddress(address: GeoPoint) {
