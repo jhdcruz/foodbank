@@ -50,11 +50,8 @@ class MapFragment : Fragment() {
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS,
         ) {
-            // HACK: hacky way of getting and centering on user location
-            //       then disabling user tracking
             mapBox.setupGesturesListener()
             mapBox.initLocationComponent()
-            mapBox.onCameraTrackingDismissed()
 
             runBlocking {
                 addAnnotationsToMap()
@@ -67,8 +64,9 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var isTracking = false
+        var isTracking = true
 
+        // allow toggling user tracking
         fab.setOnClickListener {
             isTracking = if (!isTracking) {
                 mapBox.setupGesturesListener()
