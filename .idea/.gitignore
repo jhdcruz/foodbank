@@ -1,4 +1,4 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-kotlinc.xml
+*
+!detekt.xml
+!externalDependencies.xml
+!git_toolbox_prj.xml
