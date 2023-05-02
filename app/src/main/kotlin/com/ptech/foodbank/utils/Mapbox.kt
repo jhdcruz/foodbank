@@ -5,8 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.location.LocationManager
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.location.LocationManagerCompat
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
@@ -58,9 +60,7 @@ class Mapbox(private val mapView: MapView) {
         }
     }
 
-    /**
-     * Track and follow user location on map
-     */
+    /** Track and follow user location on map */
     fun setupGesturesListener() {
         mapView.gestures.addOnMoveListener(onMoveListener)
     }
@@ -82,9 +82,8 @@ class Mapbox(private val mapView: MapView) {
     }
 
     /**
-     * Removes user location tracking.
-     * usually when it is no longer needed such as
-     * onDestroy() or onPause()
+     * Removes user location tracking. usually when it is no longer needed such as onDestroy() or
+     * onPause()
      */
     fun onCameraTrackingDismissed() {
         mapView.location2.removeOnIndicatorPositionChangedListener(
@@ -95,10 +94,15 @@ class Mapbox(private val mapView: MapView) {
         mapView.gestures.removeOnMoveListener(onMoveListener)
     }
 
-    /**
-     * Mapbox-specific utility functions
-     */
+    /** Mapbox-specific utility functions */
     companion object Utils {
+
+        fun isLocationEnabled(context: Context): Boolean {
+            val locationManager =
+                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+            return LocationManagerCompat.isLocationEnabled(locationManager)
+        }
 
         @Suppress("MagicNumber")
         private fun Drawable.toBitmap(): Bitmap? {
@@ -121,9 +125,7 @@ class Mapbox(private val mapView: MapView) {
             }
         }
 
-        /**
-         * Get a bitmap from a drawable [resourceId].
-         */
+        /** Get a bitmap from a drawable [resourceId]. */
         fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int): Bitmap? {
             return AppCompatResources.getDrawable(context, resourceId)?.toBitmap()
         }
