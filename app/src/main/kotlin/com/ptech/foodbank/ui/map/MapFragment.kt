@@ -68,7 +68,18 @@ class MapFragment : Fragment() {
 
         // allow toggling user tracking
         fab.setOnClickListener {
-            isTracking = if (!isTracking) {
+            isTracking = if (isTracking) {
+                mapBox.onCameraTrackingDismissed()
+
+                Toast.makeText(
+                    requireContext(),
+                    "User tracking disabled",
+                    Toast.LENGTH_SHORT,
+                ).show()
+                fab.setImageResource(R.drawable.baseline_location_24)
+
+                false
+            } else {
                 mapBox.setupGesturesListener()
                 mapBox.initLocationComponent()
 
@@ -80,25 +91,11 @@ class MapFragment : Fragment() {
                 fab.setImageResource(R.drawable.baseline_location_searching_24)
 
                 true
-            } else {
-                mapBox.onCameraTrackingDismissed()
-
-                Toast.makeText(
-                    requireContext(),
-                    "User tracking disabled",
-                    Toast.LENGTH_SHORT,
-                ).show()
-                fab.setImageResource(R.drawable.baseline_location_24)
-
-                false
             }
         }
     }
 
-    /**
-     * Add annotations (markers) to the map
-     * using the data fetched from firestore asynchronously
-     */
+    /** Add annotations (markers) to the map using the data fetched from firestore asynchronously */
     private suspend fun addAnnotationsToMap() = coroutineScope {
         launch {
             val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
