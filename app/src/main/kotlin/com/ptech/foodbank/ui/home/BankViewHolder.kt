@@ -2,12 +2,13 @@ package com.ptech.foodbank.ui.home
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.firestore.GeoPoint
 import com.mapbox.geojson.Point
@@ -39,6 +40,14 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     fun setBankName(name: String) {
         val textView = view.findViewById<TextView>(R.id.bank_name)
         textView.text = name
+    }
+
+    fun setVerified(verified: Boolean) {
+        val mark = view.findViewById<ImageView>(R.id.bank_verified)
+
+        if (!verified) {
+            mark.visibility = View.GONE
+        } // image shows by default
     }
 
     fun setBankCapacity(capacity: Int) {
@@ -99,8 +108,20 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         textView.text = bio
     }
 
+    fun setBankActionDirections(address: GeoPoint) {
+        val bundle = Bundle()
+        bundle.putString("address", address.toString())
+
+        val dirButton = view.findViewById<View>(R.id.bank_action_direction)
+
+        dirButton.setOnClickListener {
+            it.findNavController()
+                .navigate(R.id.action_navigation_home_to_navigation_directions, bundle)
+        }
+    }
+
     fun setBankActionCall(phone: String) {
-        val callIntent = Intent(Intent.ACTION_CALL).apply {
+        val callIntent = Intent(Intent.ACTION_DIAL).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             data = Uri.parse("tel:$phone")
         }
@@ -112,9 +133,9 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun setBankActionWeb(website: String) {
-        val webIntent = Intent(Intent.ACTION_WEB_SEARCH).apply {
+        val webIntent = Intent(Intent.ACTION_VIEW).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            putExtra(SearchManager.QUERY, website)
+            data = Uri.parse("https://$website")
         }
 
         val webButton = view.findViewById<View>(R.id.bank_action_web)

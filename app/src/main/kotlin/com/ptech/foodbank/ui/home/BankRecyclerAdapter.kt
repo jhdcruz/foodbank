@@ -27,10 +27,14 @@ class BankRecyclerAdapter(private val data: List<Bank>) :
         holder.apply {
             setBankImage(bank.image)
             setBankName(bank.name)
+            setVerified(bank.verified)
             setBankCapacity(bank.capacity)
             setBankBio(bank.bio)
 
-            bank.location?.let { setBankAddress(it) }
+            bank.location?.let {
+                setBankActionDirections(it)
+                setBankAddress(it)
+            }
             bank.contacts["phone"]?.let { setBankActionCall(it) }
             bank.contacts["website"]?.let { setBankActionWeb(it) }
         }

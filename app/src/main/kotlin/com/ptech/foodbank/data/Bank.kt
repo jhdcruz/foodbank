@@ -10,6 +10,7 @@ data class Bank(
     val image: String,
     var location: GeoPoint? = null,
     val name: String,
+    val verified: Boolean,
 
     val timeOpen: Int,
     val timeClosing: Int,
@@ -23,6 +24,7 @@ data class Bank(
         image = "",
         location = null,
         name = "",
+        verified = false,
         timeOpen = 0,
         timeClosing = 0,
     )

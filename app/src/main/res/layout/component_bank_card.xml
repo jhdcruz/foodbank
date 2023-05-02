@@ -33,12 +33,31 @@
             android:padding="16dp">
 
             <!-- Title, secondary and supporting text -->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/bank_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sample_heading"
-                android:textAppearance="?attr/textAppearanceTitleLarge" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/bank_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sample_heading"
+                    android:textAppearance="?attr/textAppearanceTitleLarge" />
+
+                <ImageView
+                    android:id="@+id/bank_verified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="4dp"
+                    android:alpha="0.5"
+                    android:contentDescription="@string/verified_string"
+                    android:tooltipText="@string/verified_string"
+                    app:srcCompat="@drawable/baseline_gpp_good_24"
+                    app:tint="#A5A5A5" />
+            </LinearLayout>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/bank_address"
