@@ -1,9 +1,10 @@
 package com.ptech.foodbank.ui.home
 
+import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,6 +23,10 @@ import com.mapbox.search.result.SearchResult
 import com.ptech.foodbank.R
 import com.ptech.foodbank.utils.Coil.imageLoader
 import com.ptech.foodbank.utils.Coil.imageRequest
+import com.ptech.foodbank.utils.Crashlytics.reporter
+import com.ptech.foodbank.utils.Feedback.showToast
+import com.ptech.foodbank.utils.Permissions
+import com.ptech.foodbank.utils.Permissions.isPermissionGranted
 
 private const val CAPACITY_STABLE = 5
 private const val CAPACITY_HIGH = 7
@@ -96,7 +101,7 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
             }
 
             override fun onError(e: Exception) {
-                Log.i("BankViewHolder", "Reverse geocoding error", e)
+                reporter.recordException(e)
             }
         }
 
@@ -121,14 +126,37 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun setBankActionCall(phone: String) {
-        val callIntent = Intent(Intent.ACTION_DIAL).apply {
+        val callIntent = Intent(Intent.ACTION_CALL).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             data = Uri.parse("tel:$phone")
         }
 
         val callView = view.findViewById<View>(R.id.bank_action_call)
         callView.setOnClickListener {
-            view.context.startActivity(callIntent)
+            // check for call/dialing permission
+            if (!isPermissionGranted(view.context, Manifest.permission.CALL_PHONE)) {
+                Permissions.getPermissions(
+                    view.context,
+                    arrayOf(
+                        Manifest.permission.CALL_PHONE,
+                    ),
+                )
+            }
+
+            // callbacks
+            @Suppress("SwallowedException")
+            try {
+                // start call session
+                view.context.startActivity(callIntent)
+            } catch (e: SecurityException) {
+                // starting call without proper permissions
+                showToast(view.context, "Phone permission required to continue")
+            } catch (e: ActivityNotFoundException) {
+                // report unusual error
+                showToast(view.context, "Cannot initiate call session")
+
+                reporter.recordException(e)
+            }
         }
     }
 
