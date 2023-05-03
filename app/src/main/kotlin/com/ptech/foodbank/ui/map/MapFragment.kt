@@ -61,7 +61,7 @@ class MapFragment : Fragment() {
     ): View {
         mapViewModel = ViewModelProvider(this)[MapViewModel::class.java]
         _binding = FragmentMapBinding.inflate(inflater, container, false)
-        _context = viewContext
+        _context = requireContext()
 
         val view = binding.root
 
