@@ -138,3 +138,5 @@ include:
   - name: DependencyNotationArgument
   - name: ClassName
   - name: ReplaceIsEmptyWithIfEmpty
+ exclude:
+   - name: KotlinAnnotator
