@@ -31,7 +31,7 @@ class MapFragment : Fragment() {
     private var _context: Context? = null
 
     private val binding get() = _binding!!
-    private val context get() = _context!!
+    private val viewContext get() = _context!!
 
     private lateinit var mapBox: Mapbox
     private lateinit var mapView: MapView
@@ -61,12 +61,12 @@ class MapFragment : Fragment() {
     ): View {
         mapViewModel = ViewModelProvider(this)[MapViewModel::class.java]
         _binding = FragmentMapBinding.inflate(inflater, container, false)
-        _context = context
+        _context = viewContext
 
         val view = binding.root
 
         // Check if location is enabled
-        if (!context.isLocationEnabled()) {
+        if (!viewContext.isLocationEnabled()) {
             Snackbar.make(
                 binding.root,
                 "Location is currently disabled",
@@ -104,14 +104,14 @@ class MapFragment : Fragment() {
             isTracking = if (isTracking) {
                 mapBox.onCameraTrackingDismissed()
 
-                context.showToast("User tracking disabled")
+                viewContext.showToast("User tracking disabled")
                 fab.setImageResource(R.drawable.baseline_location_24)
                 false
             } else {
                 mapBox.setupGesturesListener()
                 mapBox.initLocationComponent()
 
-                context.showToast("User tracking enabled")
+                viewContext.showToast("User tracking enabled")
                 fab.setImageResource(R.drawable.baseline_location_searching_24)
                 true
             }
@@ -125,7 +125,7 @@ class MapFragment : Fragment() {
 
         // get marker bitmap from drawables
         val pinMarker = bitmapFromDrawableRes(
-            context,
+            viewContext,
             R.drawable.baseline_red_marker_24,
         )
 
