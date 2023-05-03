@@ -60,6 +60,8 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.firebase.bom))
+
     implementation(libs.androidx.core)
     implementation(libs.appcompat)
     implementation(libs.material.ui)
