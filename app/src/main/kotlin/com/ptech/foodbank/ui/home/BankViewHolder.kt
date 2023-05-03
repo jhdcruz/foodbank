@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.firestore.GeoPoint
@@ -120,8 +119,6 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         val dirButton = view.findViewById<View>(R.id.bank_action_direction)
 
         dirButton.setOnClickListener {
-            it.findNavController()
-                .navigate(R.id.action_navigation_home_to_navigation_directions, bundle)
         }
     }
 
@@ -150,10 +147,10 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
                 view.context.startActivity(callIntent)
             } catch (e: SecurityException) {
                 // starting call without proper permissions
-                showToast(view.context, "Phone permission required to continue")
+                view.context.showToast("Phone permission required to continue")
             } catch (e: ActivityNotFoundException) {
                 // report unusual error
-                showToast(view.context, "Cannot initiate call session")
+                view.context.showToast("Cannot initiate call session")
 
                 reporter.recordException(e)
             }
