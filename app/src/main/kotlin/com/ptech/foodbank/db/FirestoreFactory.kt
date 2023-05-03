@@ -9,4 +9,8 @@ internal class FirestoreFactory {
     fun getBanks(): CollectionReference {
         return db.collection("banks")
     }
+
+    fun getNotifications(): CollectionReference {
+        return db.collection("notifications")
+    }
 }
