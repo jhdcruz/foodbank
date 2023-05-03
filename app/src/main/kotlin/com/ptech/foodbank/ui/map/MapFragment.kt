@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
@@ -65,21 +66,16 @@ class MapFragment : Fragment() {
         val view = binding.root
 
         // Check if location is enabled
-        // redirect to location settings on ACCEPT,
-        // show toast of tracking unavailability on CANCEL
-        if (!isLocationEnabled(requireContext())) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setCancelable(false)
-                .setIcon(R.drawable.baseline_location_24)
-                .setTitle("Location disabled")
-                .setMessage("Location is currently disabled, would you like to enable it?")
-                .setPositiveButton("Enable") { _: DialogInterface, _: Int ->
+        if (!context.isLocationEnabled()) {
+            Snackbar.make(
+                binding.root,
+                "Location is currently disabled",
+                Snackbar.LENGTH_LONG
+            )
+                // give option to enable it
+                .setAction("ENABLE") {
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                 }
-                .setNegativeButton("Ignore") { _: DialogInterface, _: Int ->
-                    showToast(requireContext(), "User tracking will not be available")
-                }
-                .create()
                 .show()
         }
 

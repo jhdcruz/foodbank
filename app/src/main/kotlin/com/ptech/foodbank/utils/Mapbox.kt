@@ -96,10 +96,10 @@ class Mapbox(private val mapView: MapView) {
 
     /** Mapbox-specific utility functions */
     companion object Utils {
-
-        fun isLocationEnabled(context: Context): Boolean {
+        /** Check android's location settings */
+        fun Context.isLocationEnabled(): Boolean {
             val locationManager =
-                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
             return LocationManagerCompat.isLocationEnabled(locationManager)
         }
