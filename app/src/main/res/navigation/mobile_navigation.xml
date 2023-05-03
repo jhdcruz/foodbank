@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.ptech.foodbank.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_directions"
+            app:destination="@id/navigation_directions" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_map"
@@ -22,4 +26,11 @@
         android:name="com.ptech.foodbank.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/navigation_directions"
+        android:name="com.ptech.foodbank.ui.navigation.NavigationFragment"
+        android:label="fragment_navigation"
+        tools:layout="@layout/fragment_navigation" />
+
 </navigation>
