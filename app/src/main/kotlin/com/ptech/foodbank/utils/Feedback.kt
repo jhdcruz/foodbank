@@ -4,9 +4,9 @@ import android.content.Context
 import android.widget.Toast
 
 object Feedback {
-    fun showToast(context: Context, msg: String, duration: Int? = null) {
+    fun Context.showToast(msg: String, duration: Int? = null) {
         Toast.makeText(
-            context,
+            this,
             msg,
             duration ?: Toast.LENGTH_SHORT
         )

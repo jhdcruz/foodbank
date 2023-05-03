@@ -1,17 +1,12 @@
 package com.ptech.foodbank
 
-import android.Manifest
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ptech.foodbank.databinding.ActivityMainBinding
-import com.ptech.foodbank.utils.Permissions.getPermissions
-import com.ptech.foodbank.utils.Permissions.isPermissionGranted
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,29 +24,5 @@ class MainActivity : AppCompatActivity() {
 
         val navController: NavController = navHostFragment.navController
         navView.setupWithNavController(navController)
-
-        // check and request for required location permission
-        if (!isPermissionGranted(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-            getPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                ),
-            )
-        }
-
-        // check and request for notification permission for mapbox navigation
-        // for Android 33 (Tiramisu) and above
-        // See: https://docs.mapbox.com/android/navigation/guides/get-started/install/
-        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-        if (!isPermissionGranted(this, Manifest.permission.POST_NOTIFICATIONS)) {
-            getPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.POST_NOTIFICATIONS,
-                ),
-            )
-        }
     }
 }
