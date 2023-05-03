@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.home.HomeFragment">
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
@@ -48,5 +49,4 @@
             android:hint="@string/searchbar_hint" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
