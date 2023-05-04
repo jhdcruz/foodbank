@@ -42,10 +42,8 @@ jobs:
       - name: ./gradlew permissions
         run: chmod +x ./gradlew
 
-      - name: Prepare android sdk
-        run: |
-          sudo apt install sdkmanager -y
-          yes | (sdkmanager --licenses;dd status=none of=/dev/null)
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
 
       - name: Prepare libraries configs
         env:
