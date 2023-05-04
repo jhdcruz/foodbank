@@ -64,12 +64,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Gradle dependency submission
+        if: always()
         uses: mikepenz/gradle-dependency-submission@main
         with:
           gradle-build-module: :app
           gradle-build-configuration: debugCompileClasspath
 
       - name: Qodana scan
+        if: always()
         uses: JetBrains/qodana-action@main
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
