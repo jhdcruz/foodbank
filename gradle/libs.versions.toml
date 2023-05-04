@@ -21,6 +21,7 @@ mapboxNavigationSdk = "2.10.4"
 materialUi = "1.8.0"
 androidNavigation = "2.5.3"
 playServicesLocation = "21.0.1"
+playServicesAuth = "20.5.0"
 recyclerview = "1.3.0"
 swiperefreshlayout = "1.1.0"
 
@@ -40,6 +41,11 @@ lifecycle = ["lifecycle-livedata", "lifecycle-runtime", "lifecycle-viewmodel"]
 mapbox = ["mapbox", "mapbox-discover", "mapbox-search", "mapbox-navigation"]
 navigation = ["navigation-fragment", "navigation-ui"]
 test-extensions = ["junit-ext", "espresso-core"]
+play-services = [
+    "play-services-location",
+    "play-services-coroutines",
+    "play-services-auth",
+]
 
 [libraries]
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "core" }
@@ -48,13 +54,15 @@ material-ui = { module = "com.google.android.material:material", version.ref = "
 navigation-fragment = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidNavigation" }
 navigation-ui = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidNavigation" }
 constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
-play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
-# libs
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
+
+# Play services
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+play-services-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 
 # firebase (BoM Usage)
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
