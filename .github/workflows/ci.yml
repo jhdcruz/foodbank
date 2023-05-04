@@ -72,3 +72,10 @@ jobs:
         uses: JetBrains/qodana-action@main
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+          
+      - name: Trunk checks
+        if: always()
+        uses: trunk-io/trunk-action@v1
+        with:
+          check-mode: all
+          trunk-token: ${{ secrets.TRUNK_TOKEN }}
