@@ -38,8 +38,10 @@ jobs:
       - name: ./gradlew permissions
         run: chmod +x ./gradlew
 
-      - name: Accept android licences
-        run: yes | sdkmanager --licenses
+      - name: Prepare android sdk
+        run: |
+          sudo apt install sdkmanager -y
+          yes | sdkmanager --licenses
 
       - name: Prepare libraries configs
         env:
