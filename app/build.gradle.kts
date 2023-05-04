@@ -67,8 +67,6 @@ dependencies {
     implementation(libs.material.ui)
     implementation(libs.constraintlayout)
     implementation(libs.recyclerview)
-    implementation(libs.play.services.location)
-    implementation(libs.coroutines.play.services)
     implementation(libs.swiperefreshlayout)
     implementation(libs.coil)
 
@@ -77,6 +75,7 @@ dependencies {
     implementation(libs.bundles.navigation)
     implementation(libs.bundles.mapbox)
     implementation(libs.bundles.firebase)
+    implementation(libs.bundles.play.services)
 
     // test
     testImplementation(libs.junit)
