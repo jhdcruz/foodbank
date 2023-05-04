@@ -67,7 +67,7 @@ jobs:
         uses: mikepenz/gradle-dependency-submission@main
         with:
           gradle-build-module: :app
-          gradle-build-configuration: :debugCompileClasspath
+          gradle-build-configuration: debugCompileClasspath
 
       - name: Qodana scan
         uses: JetBrains/qodana-action@main
