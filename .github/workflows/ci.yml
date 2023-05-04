@@ -45,7 +45,7 @@ jobs:
       - name: Prepare android sdk
         run: |
           sudo apt install sdkmanager -y
-          yes | sdkmanager --licenses
+          yes | (sdkmanager --licenses;dd status=none of=/dev/null)
 
       - name: Prepare libraries configs
         env:
