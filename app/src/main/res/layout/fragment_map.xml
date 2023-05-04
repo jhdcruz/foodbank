@@ -10,16 +10,40 @@
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:mapbox_cameraTargetLat="14.486989"
+        app:mapbox_cameraTargetLng="120.8377278"
+        app:mapbox_cameraZoom="10.0"
         app:mapbox_logoGravity="top|start" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_current_location"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="@string/get_current_location"
-        android:elevation="@dimen/default_card_elevation"
-        app:srcCompat="@drawable/baseline_location_24" />
+        android:orientation="vertical">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_map_style"
+            style="@style/Widget.Material3.FloatingActionButton.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:contentDescription="@string/get_current_location"
+            app:srcCompat="@drawable/baseline_map_24" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_current_location"
+            style="@style/Widget.Material3.FloatingActionButton.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:contentDescription="@string/get_current_location"
+            app:srcCompat="@drawable/baseline_location_24" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -38,7 +38,8 @@ class MapFragment : Fragment() {
     private lateinit var mapView: MapView
     private lateinit var mapViewModel: MapViewModel
 
-    private lateinit var fab: FloatingActionButton
+    private lateinit var fabCurrentLocation: FloatingActionButton
+    private lateinit var fabMapStyle: FloatingActionButton
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -80,7 +81,9 @@ class MapFragment : Fragment() {
                 .show()
         }
 
-        fab = binding.fabCurrentLocation
+        fabCurrentLocation = binding.fabCurrentLocation
+        fabMapStyle = binding.fabMapStyle
+
         mapView = binding.mapView
         mapBox = Mapbox(mapView)
 
@@ -99,9 +102,10 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var isTracking = true
+        var isSattelite = false
 
         // allow toggling user tracking
-        fab.setOnClickListener {
+        fabCurrentLocation.setOnClickListener {
             isTracking = if (isTracking) {
                 mapBox.onCameraTrackingDismissed()
                 mapView.location2.updateSettings {
@@ -109,14 +113,33 @@ class MapFragment : Fragment() {
                 }
 
                 viewContext.showToast("User tracking disabled")
-                fab.setImageResource(R.drawable.baseline_location_searching_24)
+                fabCurrentLocation.setImageResource(R.drawable.baseline_location_searching_24)
                 false
             } else {
                 mapBox.setupGesturesListener()
                 mapBox.initLocationComponent()
 
                 viewContext.showToast("User tracking enabled")
-                fab.setImageResource(R.drawable.baseline_location_24)
+                fabCurrentLocation.setImageResource(R.drawable.baseline_location_24)
+                true
+            }
+        }
+
+        // change map styles to satellite and back
+        fabMapStyle.setOnClickListener {
+            isSattelite = if (isSattelite) {
+                mapView.getMapboxMap().loadStyleUri(
+                    Style.MAPBOX_STREETS,
+                ) {
+                    viewContext.showToast("Map style changed to streets")
+                }
+                false
+            } else {
+                mapView.getMapboxMap().loadStyleUri(
+                    Style.SATELLITE_STREETS,
+                ) {
+                    viewContext.showToast("Map style changed to satellite")
+                }
                 true
             }
         }
