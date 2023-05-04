@@ -7,7 +7,7 @@ coroutines = "1.7.0-RC"
 detekt = "1.23.0-RC3"
 espressoCore = "3.5.1"
 googleServices = "4.3.15"
-gradleVersion = "8.1.0-beta01"
+gradleVersion = "8.2.0-alpha01"
 junit = "4.13.2"
 firebase = "32.0.0"
 perfPlugin = "1.4.2"
@@ -37,7 +37,7 @@ firebase = [
     "firebase-perf",
 ]
 lifecycle = ["lifecycle-livedata", "lifecycle-runtime", "lifecycle-viewmodel"]
-mapbox = ["mapbox", "mapbox-discover", "mapbox-search", "mapbox-navigation"]
+mapbox = ["mapbox", "mapbox-discover", "mapbox-search", "mapbox-navigation", "mapbox-search-ui"]
 navigation = ["navigation-fragment", "navigation-ui"]
 test-extensions = ["junit-ext", "espresso-core"]
 
@@ -78,6 +78,7 @@ lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", v
 mapbox = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
 mapbox-discover = { module = "com.mapbox.search:discover", version.ref = "mapboxSdk" }
 mapbox-search = { module = "com.mapbox.search:mapbox-search-android", version.ref = "mapboxSdk" }
+mapbox-search-ui = { module = "com.mapbox.search:mapbox-search-android-ui", version.ref = "mapboxSdk" }
 mapbox-navigation = { module = "com.mapbox.navigation:android", version.ref = "mapboxNavigationSdk" }
 
 # test
