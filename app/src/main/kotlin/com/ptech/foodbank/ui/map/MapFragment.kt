@@ -17,6 +17,7 @@ import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
+import com.mapbox.maps.plugin.locationcomponent.location2
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
 import com.ptech.foodbank.utils.Feedback.showToast
@@ -103,6 +104,9 @@ class MapFragment : Fragment() {
         fab.setOnClickListener {
             isTracking = if (isTracking) {
                 mapBox.onCameraTrackingDismissed()
+                mapView.location2.updateSettings {
+                    enabled = false
+                }
 
                 viewContext.showToast("User tracking disabled")
                 fab.setImageResource(R.drawable.baseline_location_searching_24)
