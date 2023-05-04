@@ -105,14 +105,14 @@ class MapFragment : Fragment() {
                 mapBox.onCameraTrackingDismissed()
 
                 viewContext.showToast("User tracking disabled")
-                fab.setImageResource(R.drawable.baseline_location_24)
+                fab.setImageResource(R.drawable.baseline_location_searching_24)
                 false
             } else {
                 mapBox.setupGesturesListener()
                 mapBox.initLocationComponent()
 
                 viewContext.showToast("User tracking enabled")
-                fab.setImageResource(R.drawable.baseline_location_searching_24)
+                fab.setImageResource(R.drawable.baseline_location_24)
                 true
             }
         }
