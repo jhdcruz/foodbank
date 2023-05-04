@@ -8,7 +8,7 @@ object Feedback {
         Toast.makeText(
             this,
             msg,
-            duration ?: Toast.LENGTH_SHORT
+            duration ?: Toast.LENGTH_SHORT,
         )
             .show()
     }

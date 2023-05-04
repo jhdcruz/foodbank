@@ -70,7 +70,7 @@ class MapFragment : Fragment() {
             Snackbar.make(
                 binding.root,
                 "Location is currently disabled",
-                Snackbar.LENGTH_LONG
+                Snackbar.LENGTH_LONG,
             )
                 // give option to enable it
                 .setAction("ENABLE") {

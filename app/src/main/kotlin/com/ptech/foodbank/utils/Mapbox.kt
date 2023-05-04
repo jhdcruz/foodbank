@@ -41,7 +41,7 @@ class Mapbox(private val mapView: MapView) {
             CameraOptions.Builder()
                 .center(it)
                 .zoom(DEFAULT_CAMERA_ZOOM)
-                .build()
+                .build(),
         )
         mapView.gestures.focalPoint = mapView.getMapboxMap().pixelForCoordinate(it)
     }
