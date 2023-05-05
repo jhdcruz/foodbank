@@ -95,3 +95,4 @@ mapbox-navigation = { module = "com.mapbox.navigation:android", version.ref = "m
 junit = { module = "junit:junit", version.ref = "junit" }
 junit-ext = { module = "androidx.test.ext:junit", version.ref = "junitVersion" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+
