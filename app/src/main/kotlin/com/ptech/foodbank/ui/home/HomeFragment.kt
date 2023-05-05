@@ -1,5 +1,6 @@
 package com.ptech.foodbank.ui.home
 
+import android.app.Activity.RESULT_OK
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +10,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.search.SearchBar
+import com.ptech.foodbank.R
 import com.ptech.foodbank.data.Bank
 import com.ptech.foodbank.databinding.FragmentHomeBinding
+import com.ptech.foodbank.utils.Auth.getAuth
 
 class HomeFragment : Fragment() {
-
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -22,9 +28,22 @@ class HomeFragment : Fragment() {
 
     private lateinit var refresher: SwipeRefreshLayout
     private lateinit var loader: CircularProgressIndicator
+    private lateinit var searchBar: SearchBar
 
     private var banksRecyclerView: RecyclerView? = null
     private var banksList: List<Bank>? = null
+
+    private val signInLauncher = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract()
+    ) {
+        this.onSignInResult(it)
+    }
+
+    private val signInIntent = AuthUI.getInstance()
+        .createSignInIntentBuilder()
+        .setAvailableProviders(providers)
+        .setTheme(R.style.Theme_FoodBank)
+        .build()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +58,10 @@ class HomeFragment : Fragment() {
         banksRecyclerView = binding.bankList
         banksRecyclerView?.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        // search bar
+        searchBar = binding.searchBar
+        searchBar.inflateMenu(R.menu.search_menu)
 
         // pull-to-refresh feature
         refresher = binding.swipeRefresh
@@ -55,6 +78,18 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        searchBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.user -> {
+                    signInLauncher.launch(signInIntent)
+                    true
+                }
+
+                else -> false
+            }
+        }
+
         getData()
     }
 
@@ -71,8 +106,23 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
+        val response = result.idpResponse
+
+        if (result.resultCode == RESULT_OK) {
+            // Successfully signed in
+            val user = getAuth.currentUser
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private val providers = arrayListOf(
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
     }
 }
