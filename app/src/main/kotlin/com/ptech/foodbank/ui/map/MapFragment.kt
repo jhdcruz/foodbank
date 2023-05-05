@@ -96,7 +96,8 @@ class MapFragment : Fragment() {
 
         mapView = binding.mapView
         mapBox = Mapbox(mapView)
-        viewAnnotationManager = binding.mapView.viewAnnotationManager
+        viewAnnotationManager = mapView.viewAnnotationManager
+        pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
 
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS,
@@ -107,8 +108,8 @@ class MapFragment : Fragment() {
             addAnnotationsToMap()
             addViewAnnotation()
 
-            pointAnnotationManager.addClickListener { clickedAnnotation ->
-                if (pointAnnotation == clickedAnnotation) {
+            pointAnnotationManager.addClickListener {
+                if (pointAnnotation == it) {
                     viewAnnotation.toggleViewVisibility()
                 }
                 true
@@ -121,32 +122,38 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var isTracking = true
-        var isSattelite = false
+        var isSatellite = false
 
         // allow toggling user tracking
-        fabCurrentLocation.setOnClickListener {
-            isTracking = if (isTracking) {
-                mapBox.onCameraTrackingDismissed()
-                mapView.location2.updateSettings {
-                    enabled = false
+        if (!viewContext.isLocationEnabled()) {
+            fabCurrentLocation.setOnClickListener {
+                viewContext.showToast("Location is currently disabled")
+            }
+        } else {
+            fabCurrentLocation.setOnClickListener {
+                isTracking = if (isTracking) {
+                    mapBox.onCameraTrackingDismissed()
+                    mapView.location2.updateSettings {
+                        enabled = false
+                    }
+
+                    viewContext.showToast("User tracking disabled")
+                    fabCurrentLocation.setImageResource(R.drawable.baseline_location_searching_24)
+                    false
+                } else {
+                    mapBox.setupGesturesListener()
+                    mapBox.initLocationComponent()
+
+                    viewContext.showToast("User tracking enabled")
+                    fabCurrentLocation.setImageResource(R.drawable.baseline_location_24)
+                    true
                 }
-
-                viewContext.showToast("User tracking disabled")
-                fabCurrentLocation.setImageResource(R.drawable.baseline_location_searching_24)
-                false
-            } else {
-                mapBox.setupGesturesListener()
-                mapBox.initLocationComponent()
-
-                viewContext.showToast("User tracking enabled")
-                fabCurrentLocation.setImageResource(R.drawable.baseline_location_24)
-                true
             }
         }
 
         // change map styles to satellite and back
         fabMapStyle.setOnClickListener {
-            isSattelite = if (isSattelite) {
+            isSatellite = if (isSatellite) {
                 mapView.getMapboxMap().loadStyleUri(
                     Style.MAPBOX_STREETS,
                 ) {
@@ -163,31 +170,33 @@ class MapFragment : Fragment() {
             }
         }
     }
+
     private fun View.toggleViewVisibility() {
-        visibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
+        visibility = if (visibility == View.VISIBLE) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
     }
 
-    @SuppressLint("SetTextI18n")
-    /** Add annotations (markers) to the map using firestore data */
-
+    /** Add view annotations to markers */
     private fun addViewAnnotation() {
-        viewAnnotation = viewAnnotationManager.addViewAnnotation(
-            resId = R.layout.annotation_layout,
-            options = viewAnnotationOptions {
-                mapViewModel.availableBanks().observe(viewLifecycleOwner) {
-                    if (it.isNotEmpty()) {
-                        for (coordinate in it) {
-                            geometry(coordinate)
-                            associatedFeatureId(pointAnnotation.featureIdentifier)
-                            offsetY((pointAnnotation.iconImageBitmap?.height!!).toInt())
-                        }
+        mapViewModel.availableBanks().observe(viewLifecycleOwner) {
+            viewAnnotation = viewAnnotationManager.addViewAnnotation(
+                resId = R.layout.component_annotation_view,
+                options = viewAnnotationOptions {
+                    for (coordinate in it) {
+                        geometry(coordinate)
+                        associatedFeatureId(pointAnnotation.featureIdentifier)
+                        offsetY((pointAnnotation.iconImageBitmap?.height!!).toInt())
                     }
                 }
-            }
-        )
+            )
+        }
     }
+
+    /** Add annotations (markers) to the map using firestore data */
     private fun addAnnotationsToMap() {
-        val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
         val pointAnnotationOptions = PointAnnotationOptions()
 
         // get marker bitmap from drawables
@@ -203,8 +212,7 @@ class MapFragment : Fragment() {
                     pointAnnotationOptions
                         .withPoint(coordinate)
                         .withIconImage(pinMarker!!)
-
-                    pointAnnotationManager.create(pointAnnotationOptions)
+                    pointAnnotation = pointAnnotationManager.create(pointAnnotationOptions)
                 }
             }
         }
