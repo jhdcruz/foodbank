@@ -34,10 +34,10 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ env.JDK_VERSION }}
-          distribution: "temurin"
+          distribution: temurin
           server-id: github
           settings-path: ${{ github.workspace }}
-          cache: "gradle"
+          cache: gradle
 
       - name: ./gradlew permissions
         run: chmod +x ./gradlew
