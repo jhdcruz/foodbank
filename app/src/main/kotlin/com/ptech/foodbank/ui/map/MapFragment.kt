@@ -1,6 +1,7 @@
 package com.ptech.foodbank.ui.map
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,9 +16,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.locationcomponent.location2
+import com.mapbox.maps.viewannotation.ViewAnnotationManager
+import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
 import com.ptech.foodbank.utils.Feedback.showToast
@@ -37,6 +42,10 @@ class MapFragment : Fragment() {
     private lateinit var mapBox: Mapbox
     private lateinit var mapView: MapView
     private lateinit var mapViewModel: MapViewModel
+    private lateinit var pointAnnotation: PointAnnotation
+    private lateinit var pointAnnotationManager: PointAnnotationManager
+    private lateinit var viewAnnotationManager: ViewAnnotationManager
+    private lateinit var viewAnnotation: View
 
     private lateinit var fabCurrentLocation: FloatingActionButton
     private lateinit var fabMapStyle: FloatingActionButton
@@ -56,6 +65,7 @@ class MapFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -86,6 +96,7 @@ class MapFragment : Fragment() {
 
         mapView = binding.mapView
         mapBox = Mapbox(mapView)
+        viewAnnotationManager = binding.mapView.viewAnnotationManager
 
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS,
@@ -94,6 +105,14 @@ class MapFragment : Fragment() {
             mapBox.initLocationComponent()
 
             addAnnotationsToMap()
+            addViewAnnotation()
+
+            pointAnnotationManager.addClickListener { clickedAnnotation ->
+                if (pointAnnotation == clickedAnnotation) {
+                    viewAnnotation.toggleViewVisibility()
+                }
+                true
+            }
         }
 
         return view
@@ -144,8 +163,29 @@ class MapFragment : Fragment() {
             }
         }
     }
+    private fun View.toggleViewVisibility() {
+        visibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
+    }
 
+    @SuppressLint("SetTextI18n")
     /** Add annotations (markers) to the map using firestore data */
+
+    private fun addViewAnnotation() {
+        viewAnnotation = viewAnnotationManager.addViewAnnotation(
+            resId = R.layout.annotation_layout,
+            options = viewAnnotationOptions {
+                mapViewModel.availableBanks().observe(viewLifecycleOwner) {
+                    if (it.isNotEmpty()) {
+                        for (coordinate in it) {
+                            geometry(coordinate)
+                            associatedFeatureId(pointAnnotation.featureIdentifier)
+                            offsetY((pointAnnotation.iconImageBitmap?.height!!).toInt())
+                        }
+                    }
+                }
+            }
+        )
+    }
     private fun addAnnotationsToMap() {
         val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
         val pointAnnotationOptions = PointAnnotationOptions()
