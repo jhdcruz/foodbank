@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.MetadataChanges
 import com.mapbox.geojson.Point
 import com.ptech.foodbank.db.FirestoreFactory
 
@@ -13,7 +14,7 @@ class MapViewModel : ViewModel() {
     private val bankLocations: MutableLiveData<List<Point>> = MutableLiveData()
 
     fun availableBanks(): LiveData<List<Point>> {
-        db.getBanks().addSnapshotListener { snapshot, e ->
+        db.getBanks().addSnapshotListener(MetadataChanges.INCLUDE) { snapshot, e ->
             if (e != null) {
                 return@addSnapshotListener
             }
