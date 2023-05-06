@@ -1,16 +1,27 @@
 package com.ptech.foodbank.ui.home
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import com.google.firebase.firestore.QuerySnapshot
+import com.ptech.foodbank.data.Bank
 import com.ptech.foodbank.db.FirestoreFactory
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.tasks.await
+import com.ptech.foodbank.utils.Crashlytics.reporter
 
 class HomeViewModel : ViewModel() {
     private val db = FirestoreFactory()
 
-    val savedBanks = flow<QuerySnapshot> {
-        emit(db.getBanks().get().await())
-    }.asLiveData()
+    fun banks(): LiveData<List<Bank>> {
+        val bankList = MutableLiveData<List<Bank>>()
+
+        db.getBanks()
+            .get()
+            .addOnSuccessListener {
+                bankList.value = it.toObjects(Bank::class.java)
+            }
+            .addOnFailureListener { e ->
+                reporter.recordException(e)
+            }
+
+        return bankList
+    }
 }

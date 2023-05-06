@@ -10,9 +10,9 @@ import com.ptech.foodbank.db.FirestoreFactory
 class NotificationsViewModel : ViewModel() {
     private val db = FirestoreFactory()
 
-    private val notificationsList: MutableLiveData<List<Notifications>> = MutableLiveData()
-
     fun notifications(): LiveData<List<Notifications>> {
+        val notificationsList = MutableLiveData<List<Notifications>>()
+
         db.getNotifications().addSnapshotListener(MetadataChanges.INCLUDE) { snapshot, e ->
             if (e != null) {
                 return@addSnapshotListener

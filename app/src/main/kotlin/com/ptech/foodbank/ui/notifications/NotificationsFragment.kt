@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.ptech.foodbank.data.Notifications
 import com.ptech.foodbank.databinding.FragmentNotificationsBinding
 
 class NotificationsFragment : Fragment() {
@@ -24,7 +23,6 @@ class NotificationsFragment : Fragment() {
     private lateinit var loader: CircularProgressIndicator
 
     private var notifRecyclerView: RecyclerView? = null
-    private var notifList: List<Notifications>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,10 +57,9 @@ class NotificationsFragment : Fragment() {
     }
 
     private fun getData() {
-        homeViewModel.notifications.observe(viewLifecycleOwner) {
+        homeViewModel.notifications().observe(viewLifecycleOwner) {
             if (it != null) {
-                notifList = it.toObjects(Notifications::class.java)
-                notifRecyclerView?.adapter = NotifRecyclerAdapter(notifList as List<Notifications>)
+                notifRecyclerView?.adapter = NotifRecyclerAdapter(it)
 
                 loader.hide()
                 refresher.isRefreshing = false

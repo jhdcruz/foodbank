@@ -21,7 +21,6 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.search.SearchBar
 import com.ptech.foodbank.R
-import com.ptech.foodbank.data.Bank
 import com.ptech.foodbank.databinding.FragmentHomeBinding
 import com.ptech.foodbank.utils.Auth.authUi
 import com.ptech.foodbank.utils.Auth.getAuth
@@ -39,7 +38,6 @@ class HomeFragment : Fragment() {
     private lateinit var avatar: MenuItem
 
     private var banksRecyclerView: RecyclerView? = null
-    private var banksList: List<Bank>? = null
 
     private var currentUser = getAuth.currentUser
 
@@ -130,10 +128,9 @@ class HomeFragment : Fragment() {
 
     private fun getData() {
         // get banks list
-        homeViewModel.savedBanks.observe(viewLifecycleOwner) {
+        homeViewModel.banks().observe(viewLifecycleOwner) {
             if (it != null) {
-                banksList = it.toObjects(Bank::class.java)
-                banksRecyclerView?.adapter = BankRecyclerAdapter(banksList as List<Bank>)
+                banksRecyclerView?.adapter = BankRecyclerAdapter(it)
 
                 loader.hide()
                 refresher.isRefreshing = false
