@@ -7,117 +7,137 @@
     android:layout_margin="8dp"
     android:layout_marginBottom="12dp">
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <!-- Media -->
-        <ImageView
-            android:id="@+id/bank_image"
-            android:layout_width="match_parent"
-            android:layout_height="194dp"
-            android:contentDescription="@string/location_image_preview"
-            android:scaleType="centerCrop" />
-
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/bank_capacity"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:max="10"
-            android:tooltipText="@string/food_bank_load_capacity" />
+        <!-- Close button for marker annotation view -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/close_button"
+            style="?attr/materialIconButtonFilledTonalStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="4dp"
+            android:tint="?attr/colorOnSurfaceInverse"
+            android:visibility="gone"
+            app:elevation="8dp"
+            app:icon="@drawable/baseline_x_48" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="18dp">
+            android:orientation="vertical">
 
-            <!-- Title, secondary and supporting text -->
+            <!-- Bank Preview -->
+            <ImageView
+                android:id="@+id/bank_image"
+                android:layout_width="match_parent"
+                android:layout_height="194dp"
+                android:contentDescription="@string/location_image_preview"
+                android:scaleType="centerCrop" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/bank_capacity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:max="10"
+                android:tooltipText="@string/food_bank_load_capacity" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <!-- Title, secondary and supporting text -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/bank_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sample_heading"
+                        android:textAppearance="?attr/textAppearanceTitleLarge" />
+
+                    <ImageView
+                        android:id="@+id/bank_verified"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="4dp"
+                        android:alpha="0.5"
+                        android:contentDescription="@string/verified_string"
+                        android:tooltipText="@string/verified_string"
+                        app:srcCompat="@drawable/baseline_gpp_good_24"
+                        app:tint="#A5A5A5" />
+                </LinearLayout>
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/bank_name"
+                    android:id="@+id/bank_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="@string/sample_heading"
-                    android:textAppearance="?attr/textAppearanceTitleLarge" />
+                    android:textAppearance="?attr/textAppearanceSubtitle2"
+                    android:textColor="?android:attr/textColorSecondary" />
 
-                <ImageView
-                    android:id="@+id/bank_verified"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/bank_bio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="4dp"
-                    android:alpha="0.5"
-                    android:contentDescription="@string/verified_string"
-                    android:tooltipText="@string/verified_string"
-                    app:srcCompat="@drawable/baseline_gpp_good_24"
-                    app:tint="#A5A5A5" />
+                    android:layout_marginTop="16dp"
+                    android:text="@string/sample_text"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?android:attr/textColorSecondary" />
+
             </LinearLayout>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/bank_address"
-                android:layout_width="wrap_content"
+            <!-- Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/sample_heading"
-                android:textAppearance="?attr/textAppearanceSubtitle2"
-                android:textColor="?android:attr/textColorSecondary" />
+                android:layout_margin="8dp"
+                android:gravity="start|center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:paddingBottom="8dp">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/bank_bio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/sample_text"
-                android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="?android:attr/textColorSecondary" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bank_action_offer"
+                    style="?attr/materialButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/default_button_height"
+                    android:layout_weight="1"
+                    android:text="@string/view"
+                    app:icon="@drawable/baseline_map_24" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bank_action_call"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_button_height"
+                    android:layout_marginHorizontal="6dp"
+                    android:text="@string/call"
+                    app:icon="@drawable/baseline_call_24" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bank_action_web"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/default_button_height"
+                    android:text="@string/website"
+                    app:icon="@drawable/baseline_share_24" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="start|center"
-            android:orientation="horizontal"
-            android:paddingHorizontal="8dp"
-            android:paddingBottom="8dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/bank_action_direction"
-                style="?attr/materialButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/default_button_height"
-                android:layout_weight="1"
-                android:text="@string/view"
-                app:icon="@drawable/baseline_map_24" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/bank_action_call"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/default_button_height"
-                android:layout_marginHorizontal="6dp"
-                android:text="@string/call"
-                app:icon="@drawable/baseline_call_24" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/bank_action_web"
-                style="?attr/materialButtonOutlinedStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/default_button_height"
-                android:text="@string/website"
-                app:icon="@drawable/baseline_share_24" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </com.google.android.material.card.MaterialCardView>

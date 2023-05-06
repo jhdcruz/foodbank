@@ -30,11 +30,9 @@ class BankRecyclerAdapter(private val data: List<Bank>) :
             setVerified(bank.verified)
             setBankCapacity(bank.capacity)
             setBankBio(bank.bio)
+            setBankAddress(bank.location)
+            setBankOffer()
 
-            bank.location?.let {
-                setBankActionDirections(it)
-                setBankAddress(it)
-            }
             bank.contacts["phone"]?.let { setBankActionCall(it) }
             bank.contacts["website"]?.let { setBankActionWeb(it) }
         }

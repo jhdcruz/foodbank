@@ -10,11 +10,13 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.GeoPoint
 import com.mapbox.maps.MapView
@@ -28,6 +30,12 @@ import com.mapbox.maps.plugin.locationcomponent.location2
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
+import com.ptech.foodbank.ui.home.BankUtils.getAddress
+import com.ptech.foodbank.ui.home.BankUtils.getBankActionCall
+import com.ptech.foodbank.ui.home.BankUtils.getBankActionWeb
+import com.ptech.foodbank.ui.home.BankUtils.getBankCapacity
+import com.ptech.foodbank.ui.home.BankUtils.getBankImage
+import com.ptech.foodbank.ui.home.BankUtils.getVerification
 import com.ptech.foodbank.utils.Feedback.showToast
 import com.ptech.foodbank.utils.Mapbox
 import com.ptech.foodbank.utils.Mapbox.Utils.bitmapFromDrawableRes
@@ -196,31 +204,42 @@ class MapFragment : Fragment() {
     /** Show bank dialog when clicking markers */
     @SuppressLint("SetTextI18n")
     private fun showBankDialog(context: Context, geopoint: GeoPoint) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.bank_info_dialog, null)
+        // reuse bank component card used in home tab
+        val card = LayoutInflater.from(context).inflate(R.layout.component_bank_card, null)
 
-        val titleTextView = dialogView.findViewById<TextView>(R.id.titleTextView)
-        val coordsTextView = dialogView.findViewById<TextView>(R.id.coordsTextView)
-        val emailTextView = dialogView.findViewById<TextView>(R.id.emailTextView)
-        val phoneTextView = dialogView.findViewById<TextView>(R.id.phoneTextView)
-        val websiteTextView = dialogView.findViewById<TextView>(R.id.websiteTextView)
-        val closeButton = dialogView.findViewById<Button>(R.id.closeButton)
+        val cardImage = card.findViewById<ImageView>(R.id.bank_image)
+        val cardName = card.findViewById<TextView>(R.id.bank_name)
+        val cardBio = card.findViewById<TextView>(R.id.bank_bio)
+        val cardVerified = card.findViewById<ImageView>(R.id.bank_verified)
+        val cardCapacity = card.findViewById<LinearProgressIndicator>(R.id.bank_capacity)
+        val cardAddress = card.findViewById<TextView>(R.id.bank_address)
+        val cardOffer = card.findViewById<MaterialButton>(R.id.bank_action_offer)
+        val cardPhone = card.findViewById<MaterialButton>(R.id.bank_action_call)
+        val cardWebsite = card.findViewById<MaterialButton>(R.id.bank_action_web)
+        val closeButton = card.findViewById<MaterialButton>(R.id.close_button)
 
-        mapViewModel.getBankOnLocation(requireContext(), geopoint).observe(viewLifecycleOwner) {
-            val geoPoint = it.location
-            val latitude = geoPoint?.latitude.toString()
-            val longitude = geoPoint?.longitude.toString()
+        mapViewModel.getBankOnLocation(
+            requireContext(),
+            geopoint
+        ).observe(viewLifecycleOwner) {
+            cardName.text = it.name
+            cardOffer.text = "Donate"
+            cardBio.text = it.bio
 
-            titleTextView.text = it.name
-            coordsTextView.text = "$latitude, $longitude"
-            emailTextView.text = it.contacts["email"]
-            phoneTextView.text = it.contacts["phone"]
-            websiteTextView.text = it.contacts["website"]
+            getVerification(cardVerified, it.verified)
+            context.getAddress(cardAddress, it.location)
+            context.getBankCapacity(cardCapacity, it.capacity)
+            context.getBankImage(it.image, cardImage)
+            context.getBankActionCall(cardPhone, it.contacts["phone"]!!)
+            context.getBankActionWeb(cardWebsite, it.contacts["website"]!!)
 
             val dialog = AlertDialog.Builder(context)
-                .setView(dialogView)
+                .setView(card)
                 .create()
 
+            closeButton.visibility = View.VISIBLE
             closeButton.setOnClickListener { dialog.dismiss() }
+
             dialog.show()
         }
     }
