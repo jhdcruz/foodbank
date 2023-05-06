@@ -96,13 +96,6 @@ class Mapbox(private val mapView: MapView) {
 
     /** Mapbox-specific utility functions */
     companion object Utils {
-        /** Check android's location settings */
-        fun Context.isLocationEnabled(): Boolean {
-            val locationManager =
-                getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-            return LocationManagerCompat.isLocationEnabled(locationManager)
-        }
 
         @Suppress("MagicNumber")
         private fun Drawable.toBitmap(): Bitmap? {
@@ -128,6 +121,14 @@ class Mapbox(private val mapView: MapView) {
         /** Get a bitmap from a drawable [resourceId]. */
         fun bitmapFromDrawableRes(context: Context, @DrawableRes resourceId: Int): Bitmap? {
             return AppCompatResources.getDrawable(context, resourceId)?.toBitmap()
+        }
+
+        /** Check android's location settings */
+        fun Context.isLocationEnabled(): Boolean {
+            val locationManager =
+                getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+            return LocationManagerCompat.isLocationEnabled(locationManager)
         }
     }
 }

@@ -15,7 +15,7 @@ const val DISK_CACHE = 0.05
  *
  * @see <a href="https://coil-kt.github.io/coil/getting_started/">Coil</a>
  */
-object Coil {
+internal object Coil {
     fun imageLoader(context: Context): ImageLoader {
         return ImageLoader.Builder(context)
             .memoryCache {
