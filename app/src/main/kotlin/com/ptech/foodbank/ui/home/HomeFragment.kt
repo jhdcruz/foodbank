@@ -50,7 +50,6 @@ class HomeFragment : Fragment() {
     private val signInIntent = AuthUI.getInstance()
         .createSignInIntentBuilder()
         .setAvailableProviders(LOGIN_PROVIDERS)
-        .setTheme(R.style.Theme_FoodBank)
         .build()
 
     override fun onCreateView(
