@@ -172,6 +172,7 @@ class MapFragment : Fragment() {
         }
     }
 
+
     /** Add annotations (markers) to the map using firestore data */
     private fun addAnnotationsToMap() {
         val pointAnnotationOptions = PointAnnotationOptions()
