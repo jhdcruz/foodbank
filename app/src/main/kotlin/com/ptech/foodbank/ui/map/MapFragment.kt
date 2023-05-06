@@ -185,7 +185,7 @@ class MapFragment : Fragment() {
         // get marker bitmap from drawables
         val pinMarker = bitmapFromDrawableRes(
             viewContext,
-            R.drawable.baseline_red_marker_24,
+            R.drawable.baseline_red_marker_32,
         )
 
         // get locations from firebase
