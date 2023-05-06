@@ -1,6 +1,8 @@
 package com.ptech.foodbank.ui.map
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,16 +10,24 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
+import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.locationcomponent.location2
+import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
 import com.ptech.foodbank.utils.Feedback.showToast
@@ -37,7 +47,9 @@ class MapFragment : Fragment() {
     private lateinit var mapBox: Mapbox
     private lateinit var mapView: MapView
     private lateinit var mapViewModel: MapViewModel
-
+    private lateinit var pointAnnotation: PointAnnotation
+    private lateinit var pointAnnotationManager: PointAnnotationManager
+    private lateinit var viewAnnotationManager: ViewAnnotationManager
     private lateinit var fabCurrentLocation: FloatingActionButton
     private lateinit var fabMapStyle: FloatingActionButton
 
@@ -56,6 +68,7 @@ class MapFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -86,6 +99,8 @@ class MapFragment : Fragment() {
 
         mapView = binding.mapView
         mapBox = Mapbox(mapView)
+        viewAnnotationManager = mapView.viewAnnotationManager
+        pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
 
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS,
@@ -94,6 +109,12 @@ class MapFragment : Fragment() {
             mapBox.initLocationComponent()
 
             addAnnotationsToMap()
+            pointAnnotationManager.addClickListener {
+                val geoPoint = GeoPoint(it.point.latitude(), it.point.longitude())
+                showBankDialog(_context!!, geoPoint)
+
+                true
+            }
         }
 
         return view
@@ -102,32 +123,38 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var isTracking = true
-        var isSattelite = false
+        var isSatellite = false
 
         // allow toggling user tracking
-        fabCurrentLocation.setOnClickListener {
-            isTracking = if (isTracking) {
-                mapBox.onCameraTrackingDismissed()
-                mapView.location2.updateSettings {
-                    enabled = false
+        if (!viewContext.isLocationEnabled()) {
+            fabCurrentLocation.setOnClickListener {
+                viewContext.showToast("Location is currently disabled")
+            }
+        } else {
+            fabCurrentLocation.setOnClickListener {
+                isTracking = if (isTracking) {
+                    mapBox.onCameraTrackingDismissed()
+                    mapView.location2.updateSettings {
+                        enabled = false
+                    }
+
+                    viewContext.showToast("User tracking disabled")
+                    fabCurrentLocation.setImageResource(R.drawable.baseline_location_searching_24)
+                    false
+                } else {
+                    mapBox.setupGesturesListener()
+                    mapBox.initLocationComponent()
+
+                    viewContext.showToast("User tracking enabled")
+                    fabCurrentLocation.setImageResource(R.drawable.baseline_location_24)
+                    true
                 }
-
-                viewContext.showToast("User tracking disabled")
-                fabCurrentLocation.setImageResource(R.drawable.baseline_location_searching_24)
-                false
-            } else {
-                mapBox.setupGesturesListener()
-                mapBox.initLocationComponent()
-
-                viewContext.showToast("User tracking enabled")
-                fabCurrentLocation.setImageResource(R.drawable.baseline_location_24)
-                true
             }
         }
 
         // change map styles to satellite and back
         fabMapStyle.setOnClickListener {
-            isSattelite = if (isSattelite) {
+            isSatellite = if (isSatellite) {
                 mapView.getMapboxMap().loadStyleUri(
                     Style.MAPBOX_STREETS,
                 ) {
@@ -145,9 +172,9 @@ class MapFragment : Fragment() {
         }
     }
 
+
     /** Add annotations (markers) to the map using firestore data */
     private fun addAnnotationsToMap() {
-        val pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
         val pointAnnotationOptions = PointAnnotationOptions()
 
         // get marker bitmap from drawables
@@ -163,11 +190,49 @@ class MapFragment : Fragment() {
                     pointAnnotationOptions
                         .withPoint(coordinate)
                         .withIconImage(pinMarker!!)
-
-                    pointAnnotationManager.create(pointAnnotationOptions)
+                    pointAnnotation = pointAnnotationManager.create(pointAnnotationOptions)
                 }
             }
         }
+    }
+    fun showBankDialog(context: Context, geopoint: GeoPoint) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.bank_info_dialog, null)
+
+        val titleTextView = dialogView.findViewById<TextView>(R.id.titleTextView)
+        val coordsTextView = dialogView.findViewById<TextView>(R.id.coordsTextView)
+        val emailTextView = dialogView.findViewById<TextView>(R.id.emailTextView)
+        val phoneTextView = dialogView.findViewById<TextView>(R.id.phoneTextView)
+        val websiteTextView = dialogView.findViewById<TextView>(R.id.websiteTextView)
+        val closeButton = dialogView.findViewById<Button>(R.id.closeButton)
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection("banks")
+            .whereEqualTo("location", geopoint)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents.size() > 0) {
+                    val bank = documents.first()
+                    titleTextView.text = bank.getString("name")
+                    val geoPoint = bank.getGeoPoint("location")
+                    val latitude = geoPoint?.latitude.toString()
+                    val longitude = geoPoint?.longitude.toString()
+                    coordsTextView.text = "$latitude, $longitude"
+                    emailTextView.text = bank.get("contacts.email") as String
+                    phoneTextView.text = bank.get("contacts.phone") as String
+                    websiteTextView.text = bank.get("contacts.website") as String
+
+                    val dialogBuilder = AlertDialog.Builder(context)
+                        .setView(dialogView)
+                    val dialog = dialogBuilder.create()
+                    closeButton.setOnClickListener { dialog.dismiss() }
+                    dialog.show()
+                } else {
+                    Toast.makeText(context, "No bank found at this location", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(context, "Error retrieving bank data: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     override fun onDestroyView() {
