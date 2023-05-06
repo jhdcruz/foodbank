@@ -12,12 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
@@ -111,7 +109,7 @@ class MapFragment : Fragment() {
             addAnnotationsToMap()
             pointAnnotationManager.addClickListener {
                 val geoPoint = GeoPoint(it.point.latitude(), it.point.longitude())
-                showBankDialog(_context!!, geoPoint)
+                showBankDialog(viewContext, geoPoint)
 
                 true
             }
@@ -172,7 +170,6 @@ class MapFragment : Fragment() {
         }
     }
 
-
     /** Add annotations (markers) to the map using firestore data */
     private fun addAnnotationsToMap() {
         val pointAnnotationOptions = PointAnnotationOptions()
@@ -195,7 +192,10 @@ class MapFragment : Fragment() {
             }
         }
     }
-    fun showBankDialog(context: Context, geopoint: GeoPoint) {
+
+    /** Show bank dialog when clicking markers */
+    @SuppressLint("SetTextI18n")
+    private fun showBankDialog(context: Context, geopoint: GeoPoint) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.bank_info_dialog, null)
 
         val titleTextView = dialogView.findViewById<TextView>(R.id.titleTextView)
@@ -205,34 +205,24 @@ class MapFragment : Fragment() {
         val websiteTextView = dialogView.findViewById<TextView>(R.id.websiteTextView)
         val closeButton = dialogView.findViewById<Button>(R.id.closeButton)
 
-        val db = FirebaseFirestore.getInstance()
-        db.collection("banks")
-            .whereEqualTo("location", geopoint)
-            .get()
-            .addOnSuccessListener { documents ->
-                if (documents.size() > 0) {
-                    val bank = documents.first()
-                    titleTextView.text = bank.getString("name")
-                    val geoPoint = bank.getGeoPoint("location")
-                    val latitude = geoPoint?.latitude.toString()
-                    val longitude = geoPoint?.longitude.toString()
-                    coordsTextView.text = "$latitude, $longitude"
-                    emailTextView.text = bank.get("contacts.email") as String
-                    phoneTextView.text = bank.get("contacts.phone") as String
-                    websiteTextView.text = bank.get("contacts.website") as String
+        mapViewModel.getBankOnLocation(requireContext(), geopoint).observe(viewLifecycleOwner) {
+            val geoPoint = it.location
+            val latitude = geoPoint?.latitude.toString()
+            val longitude = geoPoint?.longitude.toString()
 
-                    val dialogBuilder = AlertDialog.Builder(context)
-                        .setView(dialogView)
-                    val dialog = dialogBuilder.create()
-                    closeButton.setOnClickListener { dialog.dismiss() }
-                    dialog.show()
-                } else {
-                    Toast.makeText(context, "No bank found at this location", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(context, "Error retrieving bank data: ${exception.message}", Toast.LENGTH_SHORT).show()
-            }
+            titleTextView.text = it.name
+            coordsTextView.text = "$latitude, $longitude"
+            emailTextView.text = it.contacts["email"]
+            phoneTextView.text = it.contacts["phone"]
+            websiteTextView.text = it.contacts["website"]
+
+            val dialog = AlertDialog.Builder(context)
+                .setView(dialogView)
+                .create()
+
+            closeButton.setOnClickListener { dialog.dismiss() }
+            dialog.show()
+        }
     }
 
     override fun onDestroyView() {
