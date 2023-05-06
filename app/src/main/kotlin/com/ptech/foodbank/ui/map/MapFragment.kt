@@ -2,6 +2,7 @@ package com.ptech.foodbank.ui.map
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,10 +10,15 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
@@ -22,7 +28,6 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.locationcomponent.location2
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
-import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
 import com.ptech.foodbank.utils.Feedback.showToast
@@ -45,8 +50,6 @@ class MapFragment : Fragment() {
     private lateinit var pointAnnotation: PointAnnotation
     private lateinit var pointAnnotationManager: PointAnnotationManager
     private lateinit var viewAnnotationManager: ViewAnnotationManager
-    private lateinit var viewAnnotation: View
-
     private lateinit var fabCurrentLocation: FloatingActionButton
     private lateinit var fabMapStyle: FloatingActionButton
 
@@ -106,12 +109,10 @@ class MapFragment : Fragment() {
             mapBox.initLocationComponent()
 
             addAnnotationsToMap()
-            addViewAnnotation()
-
             pointAnnotationManager.addClickListener {
-                if (pointAnnotation == it) {
-                    viewAnnotation.toggleViewVisibility()
-                }
+                val geoPoint = GeoPoint(it.point.latitude(), it.point.longitude())
+                showBankDialog(_context!!, geoPoint)
+
                 true
             }
         }
@@ -171,30 +172,6 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun View.toggleViewVisibility() {
-        visibility = if (visibility == View.VISIBLE) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
-    }
-
-    /** Add view annotations to markers */
-    private fun addViewAnnotation() {
-        mapViewModel.availableBanks().observe(viewLifecycleOwner) {
-            viewAnnotation = viewAnnotationManager.addViewAnnotation(
-                resId = R.layout.component_annotation_view,
-                options = viewAnnotationOptions {
-                    for (coordinate in it) {
-                        geometry(coordinate)
-                        associatedFeatureId(pointAnnotation.featureIdentifier)
-                        offsetY((pointAnnotation.iconImageBitmap?.height!!).toInt())
-                    }
-                }
-            )
-        }
-    }
-
     /** Add annotations (markers) to the map using firestore data */
     private fun addAnnotationsToMap() {
         val pointAnnotationOptions = PointAnnotationOptions()
@@ -216,6 +193,45 @@ class MapFragment : Fragment() {
                 }
             }
         }
+    }
+    fun showBankDialog(context: Context, geopoint: GeoPoint) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.bank_info_dialog, null)
+
+        val titleTextView = dialogView.findViewById<TextView>(R.id.titleTextView)
+        val coordsTextView = dialogView.findViewById<TextView>(R.id.coordsTextView)
+        val emailTextView = dialogView.findViewById<TextView>(R.id.emailTextView)
+        val phoneTextView = dialogView.findViewById<TextView>(R.id.phoneTextView)
+        val websiteTextView = dialogView.findViewById<TextView>(R.id.websiteTextView)
+        val closeButton = dialogView.findViewById<Button>(R.id.closeButton)
+
+        val db = FirebaseFirestore.getInstance()
+        db.collection("banks")
+            .whereEqualTo("location", geopoint)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (documents.size() > 0) {
+                    val bank = documents.first()
+                    titleTextView.text = bank.getString("name")
+                    val geoPoint = bank.getGeoPoint("location")
+                    val latitude = geoPoint?.latitude.toString()
+                    val longitude = geoPoint?.longitude.toString()
+                    coordsTextView.text = "$latitude, $longitude"
+                    emailTextView.text = bank.get("contacts.email") as String
+                    phoneTextView.text = bank.get("contacts.phone") as String
+                    websiteTextView.text = bank.get("contacts.website") as String
+
+                    val dialogBuilder = AlertDialog.Builder(context)
+                        .setView(dialogView)
+                    val dialog = dialogBuilder.create()
+                    closeButton.setOnClickListener { dialog.dismiss() }
+                    dialog.show()
+                } else {
+                    Toast.makeText(context, "No bank found at this location", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(context, "Error retrieving bank data: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     override fun onDestroyView() {
