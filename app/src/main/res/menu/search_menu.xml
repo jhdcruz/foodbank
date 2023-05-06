@@ -5,10 +5,8 @@
     <item
         android:id="@+id/user"
         android:name="User"
-        android:icon="@drawable/baseline_account_circle_40"
-        android:tint="?attr/colorOnSurfaceVariant"
+        android:icon="@drawable/baseline_account_circle_48"
         android:title="@string/user"
-        app:showAsAction="always"
-        app:tint="?attr/colorOnSurfaceVariant" />
+        app:showAsAction="always" />
 
 </menu>
