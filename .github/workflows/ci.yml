@@ -89,3 +89,4 @@ jobs:
         with:
           check-mode: all
           trunk-token: ${{ secrets.TRUNK_TOKEN }}
+          arguments: --replace
