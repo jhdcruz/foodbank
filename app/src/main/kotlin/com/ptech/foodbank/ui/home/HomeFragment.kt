@@ -1,11 +1,13 @@
 package com.ptech.foodbank.ui.home
 
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +23,7 @@ import com.google.android.material.search.SearchBar
 import com.ptech.foodbank.R
 import com.ptech.foodbank.data.Bank
 import com.ptech.foodbank.databinding.FragmentHomeBinding
+import com.ptech.foodbank.utils.Auth.authUi
 import com.ptech.foodbank.utils.Auth.getAuth
 import com.ptech.foodbank.utils.Coil
 
@@ -48,7 +51,7 @@ class HomeFragment : Fragment() {
 
     private val signInIntent = AuthUI.getInstance()
         .createSignInIntentBuilder()
-        .setAvailableProviders(providers)
+        .setAvailableProviders(LOGIN_PROVIDERS)
         .setTheme(R.style.Theme_FoodBank)
         .build()
 
@@ -90,7 +93,30 @@ class HomeFragment : Fragment() {
         searchBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.user -> {
-                    signInLauncher.launch(signInIntent)
+                    if (currentUser == null) {
+                        // start login instance
+                        signInLauncher.launch(signInIntent)
+                    } else {
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("Sign out?")
+                            .setMessage("Are you sure you want to sign out?")
+                            .setNegativeButton("Cancel", null)
+                            .setPositiveButton("Sign out") { _, _ ->
+                                // proceed to sign out
+                                authUi.signOut(requireContext())
+                                    .addOnCompleteListener {
+                                        currentUser = null
+
+                                        // set icon to default
+                                        avatar.icon = ResourcesCompat.getDrawable(
+                                            resources,
+                                            R.drawable.baseline_account_circle_48,
+                                            null
+                                        )
+                                    }
+                            }
+                            .show()
+                    }
                     true
                 }
 
@@ -147,7 +173,7 @@ class HomeFragment : Fragment() {
     }
 
     companion object {
-        private val providers = arrayListOf(
+        private val LOGIN_PROVIDERS = arrayListOf(
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
     }
