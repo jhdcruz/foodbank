@@ -23,6 +23,7 @@ androidNavigation = "2.5.3"
 playServicesLocation = "21.0.1"
 playServicesAuth = "20.5.0"
 recyclerview = "1.3.0"
+firebaseUiAuth = "7.2.0"
 swiperefreshlayout = "1.1.0"
 
 [plugins]
@@ -37,6 +38,7 @@ firebase = [
     "firebase-firestore",
     "firebase-perf",
     "firebase-auth",
+    "firebase-ui-auth",
 ]
 lifecycle = ["lifecycle-livedata", "lifecycle-runtime", "lifecycle-viewmodel"]
 mapbox = ["mapbox", "mapbox-discover", "mapbox-search", "mapbox-navigation", "mapbox-search-ui"]
@@ -67,6 +69,7 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 
 # firebase (BoM Usage)
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
+firebase-ui-auth = { module = "com.firebaseui:firebase-ui-auth", version.ref = "firebaseUiAuth" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore-ktx" }
