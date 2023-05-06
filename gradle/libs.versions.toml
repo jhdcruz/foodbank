@@ -23,7 +23,7 @@ androidNavigation = "2.5.3"
 playServicesLocation = "21.0.1"
 playServicesAuth = "20.5.0"
 recyclerview = "1.3.0"
-firebaseUiAuth = "7.2.0"
+firebaseUiAuth = "8.0.2"
 swiperefreshlayout = "1.1.0"
 
 [plugins]
