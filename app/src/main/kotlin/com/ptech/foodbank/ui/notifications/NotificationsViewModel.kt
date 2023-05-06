@@ -1,18 +1,26 @@
 package com.ptech.foodbank.ui.notifications
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.MetadataChanges
+import com.ptech.foodbank.data.Notifications
 import com.ptech.foodbank.db.FirestoreFactory
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.tasks.await
 
 class NotificationsViewModel : ViewModel() {
     private val db = FirestoreFactory()
 
-    val notifications = flow<QuerySnapshot> {
-        val query = db.getNotifications()
+    private val notificationsList: MutableLiveData<List<Notifications>> = MutableLiveData()
 
-        emit(query.get().await())
-    }.asLiveData()
+    fun notifications(): LiveData<List<Notifications>> {
+        db.getNotifications().addSnapshotListener(MetadataChanges.INCLUDE) { snapshot, e ->
+            if (e != null) {
+                return@addSnapshotListener
+            }
+
+            notificationsList.value = snapshot?.toObjects(Notifications::class.java)
+        }
+
+        return notificationsList
+    }
 }
