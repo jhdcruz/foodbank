@@ -35,7 +35,6 @@ import com.ptech.foodbank.ui.home.BankUtils.getBankActionCall
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionWeb
 import com.ptech.foodbank.ui.home.BankUtils.getBankCapacity
 import com.ptech.foodbank.ui.home.BankUtils.getBankImage
-import com.ptech.foodbank.ui.home.BankUtils.getVerification
 import com.ptech.foodbank.utils.Feedback.showToast
 import com.ptech.foodbank.utils.Mapbox
 import com.ptech.foodbank.utils.Mapbox.Utils.bitmapFromDrawableRes
@@ -210,7 +209,6 @@ class MapFragment : Fragment() {
         val cardImage = card.findViewById<ImageView>(R.id.bank_image)
         val cardName = card.findViewById<TextView>(R.id.bank_name)
         val cardBio = card.findViewById<TextView>(R.id.bank_bio)
-        val cardVerified = card.findViewById<ImageView>(R.id.bank_verified)
         val cardCapacity = card.findViewById<LinearProgressIndicator>(R.id.bank_capacity)
         val cardAddress = card.findViewById<TextView>(R.id.bank_address)
         val cardOffer = card.findViewById<MaterialButton>(R.id.bank_action_offer)
@@ -221,22 +219,15 @@ class MapFragment : Fragment() {
         mapViewModel.getBankOnLocation(
             requireContext(),
             geopoint
-        ).observe(viewLifecycleOwner) {
-            cardName.text = it.name
-            cardOffer.text = "Donate"
-            cardBio.text = it.bio
+        ).observe(viewLifecycleOwner) { bank ->
+            cardName.text = bank.name
+            cardBio.text = bank.bio
 
-            getVerification(cardVerified, it.verified)
-            context.getAddress(cardAddress, it.location)
-            context.getBankCapacity(cardCapacity, it.capacity)
-            context.getBankImage(it.image, cardImage)
-            context.getBankActionCall(cardPhone, it.contacts["phone"]!!)
-            context.getBankActionWeb(cardWebsite, it.contacts["website"]!!)
-
-            val dialog = AlertDialog.Builder(context)
-                .setView(card)
-                .create()
-
+            context.getAddress(cardAddress, bank.location)
+            context.getBankCapacity(cardCapacity, bank.capacity)
+            context.getBankImage(bank.image, cardImage)
+            context.getBankActionCall(cardPhone, bank.contacts["phone"]!!)
+            context.getBankActionWeb(cardWebsite, bank.contacts["website"]!!)
             closeButton.visibility = View.VISIBLE
             closeButton.setOnClickListener { dialog.dismiss() }
 

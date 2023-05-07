@@ -13,7 +13,6 @@ import com.ptech.foodbank.ui.home.BankUtils.getBankActionCall
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionWeb
 import com.ptech.foodbank.ui.home.BankUtils.getBankCapacity
 import com.ptech.foodbank.ui.home.BankUtils.getBankImage
-import com.ptech.foodbank.ui.home.BankUtils.getVerification
 
 class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     private val viewContext = view.context
@@ -27,12 +26,6 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     fun setBankName(name: String) {
         val textView = view.findViewById<TextView>(R.id.bank_name)
         textView.text = name
-    }
-
-    fun setVerified(verified: Boolean) {
-        val mark = view.findViewById<ImageView>(R.id.bank_verified)
-
-        getVerification(mark, verified)
     }
 
     fun setBankCapacity(capacity: Int) {

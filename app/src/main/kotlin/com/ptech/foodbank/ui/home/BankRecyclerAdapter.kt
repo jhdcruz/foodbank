@@ -27,7 +27,6 @@ class BankRecyclerAdapter(private val data: List<Bank>) :
         holder.apply {
             setBankImage(bank.image)
             setBankName(bank.name)
-            setVerified(bank.verified)
             setBankCapacity(bank.capacity)
             setBankBio(bank.bio)
             setBankAddress(bank.location)

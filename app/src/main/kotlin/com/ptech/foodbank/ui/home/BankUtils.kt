@@ -37,14 +37,6 @@ object BankUtils {
         loader.enqueue(request)
     }
 
-    fun getVerification(mark: ImageView, verified: Boolean = false) {
-        if (verified) {
-            mark.visibility = View.VISIBLE
-        } else {
-            mark.visibility = View.GONE
-        }
-    }
-
     fun Context.getBankCapacity(capacityBar: LinearProgressIndicator, capacity: Int) {
         capacityBar.progress = capacity
 
