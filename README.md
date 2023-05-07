@@ -62,6 +62,21 @@ R.strings.xml file.
 Download `google-services.json` from firebase console's project settings, and copy it the the
 project directory
 
+### Setting up Google Sign-In
+
+#### Debug
+
+Get `SHA-1` and `SHA-256` fingerprints using the ff. command
+
+```sh
+./gradlew signingReport  # look for AndroidDebugTest section
+```
+
+Add both the fingerprints in firebase console's project settings right
+below where `google-services.json` is located.
+
+> Resource: [https://developers.google.com/android/guides/client-auth#self-signing_your_application](https://developers.google.com/android/guides/client-auth#self-signing_your_application)
+
 ## License
 
 This projects is distributed under the MIT license. See [LICENSE](./LICENSE.txt) for more
