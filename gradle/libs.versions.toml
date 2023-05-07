@@ -81,6 +81,7 @@ gradle = { module = "com.android.tools.build:gradle", version.ref = "gradleVersi
 google-services-gradle = { module = "com.google.gms:google-services", version.ref = "googleServices" }
 firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 perf-plugin-gradle = { module = "com.google.firebase:perf-plugin", version.ref = "perfPlugin" }
+safe-args = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "androidNavigation" }
 
 # lifecycle
 lifecycle-livedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }

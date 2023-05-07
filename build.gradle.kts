@@ -8,6 +8,7 @@ buildscript {
         classpath(libs.google.services.gradle)
         classpath(libs.firebase.crashlytics.gradle)
         classpath(libs.perf.plugin.gradle)
+        classpath(libs.safe.args)
     }
 }
 plugins {
