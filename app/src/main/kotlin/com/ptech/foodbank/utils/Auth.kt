@@ -6,4 +6,8 @@ import com.google.firebase.auth.FirebaseAuth
 internal object Auth {
     val getAuth = FirebaseAuth.getInstance()
     val authUi = AuthUI.getInstance()
+
+    val loginProviders = arrayListOf(
+        AuthUI.IdpConfig.GoogleBuilder().build()
+    )
 }

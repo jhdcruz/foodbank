@@ -2,6 +2,7 @@ package com.ptech.foodbank.ui.map
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -14,6 +15,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -35,6 +39,9 @@ import com.ptech.foodbank.ui.home.BankUtils.getBankActionCall
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionWeb
 import com.ptech.foodbank.ui.home.BankUtils.getBankCapacity
 import com.ptech.foodbank.ui.home.BankUtils.getBankImage
+import com.ptech.foodbank.utils.Auth.authUi
+import com.ptech.foodbank.utils.Auth.getAuth
+import com.ptech.foodbank.utils.Auth.loginProviders
 import com.ptech.foodbank.utils.Feedback.showToast
 import com.ptech.foodbank.utils.Mapbox
 import com.ptech.foodbank.utils.Mapbox.Utils.bitmapFromDrawableRes
@@ -57,6 +64,19 @@ class MapFragment : Fragment() {
     private lateinit var viewAnnotationManager: ViewAnnotationManager
     private lateinit var fabCurrentLocation: FloatingActionButton
     private lateinit var fabMapStyle: FloatingActionButton
+
+    private val signInLauncher = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract()
+    ) {
+        this.onSignInResult(it)
+    }
+
+    private val signInIntent = authUi
+        .createSignInIntentBuilder()
+        .setAvailableProviders(loginProviders)
+        .build()
+
+    private var currentUser = getAuth.currentUser
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -206,6 +226,10 @@ class MapFragment : Fragment() {
         // reuse bank component card used in home tab
         val card = LayoutInflater.from(context).inflate(R.layout.component_bank_card, null)
 
+        val dialog = AlertDialog.Builder(context)
+            .setView(card)
+            .create()
+
         val cardImage = card.findViewById<ImageView>(R.id.bank_image)
         val cardName = card.findViewById<TextView>(R.id.bank_name)
         val cardBio = card.findViewById<TextView>(R.id.bank_bio)
@@ -228,10 +252,29 @@ class MapFragment : Fragment() {
             context.getBankImage(bank.image, cardImage)
             context.getBankActionCall(cardPhone, bank.contacts["phone"]!!)
             context.getBankActionWeb(cardWebsite, bank.contacts["website"]!!)
+
             closeButton.visibility = View.VISIBLE
             closeButton.setOnClickListener { dialog.dismiss() }
-
             dialog.show()
+
+            cardOffer.setOnClickListener {
+                if (currentUser == null) {
+                    viewContext.showToast("Please login to donate")
+                    // launch sign in flow
+                    signInLauncher.launch(signInIntent)
+                } else {
+                    val route = MapFragmentDirections.mapToDonateFragment(bank.name)
+                    view?.findNavController()?.navigate(route)
+
+                    dialog.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
+        if (result.resultCode == Activity.RESULT_OK) {
+            currentUser = getAuth.currentUser
         }
     }
 

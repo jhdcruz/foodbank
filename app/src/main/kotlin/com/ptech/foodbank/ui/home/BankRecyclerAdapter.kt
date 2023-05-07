@@ -30,7 +30,7 @@ class BankRecyclerAdapter(private val data: List<Bank>) :
             setBankCapacity(bank.capacity)
             setBankBio(bank.bio)
             setBankAddress(bank.location)
-            setBankOffer()
+            setBankActionDonate(bank.name)
 
             bank.contacts["phone"]?.let { setBankActionCall(it) }
             bank.contacts["website"]?.let { setBankActionWeb(it) }

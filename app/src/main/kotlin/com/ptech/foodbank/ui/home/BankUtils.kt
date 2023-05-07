@@ -27,7 +27,7 @@ import com.ptech.foodbank.utils.Permissions
 
 object BankUtils {
 
-    private const val CAPACITY_STABLE = 5
+    private const val CAPACITY_STABLE = 4
     private const val CAPACITY_HIGH = 7
 
     fun Context.getBankImage(image: String, imageView: ImageView) {

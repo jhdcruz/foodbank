@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
-import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.progressindicator.CircularProgressIndicator
@@ -24,6 +23,7 @@ import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentHomeBinding
 import com.ptech.foodbank.utils.Auth.authUi
 import com.ptech.foodbank.utils.Auth.getAuth
+import com.ptech.foodbank.utils.Auth.loginProviders
 import com.ptech.foodbank.utils.Coil
 
 class HomeFragment : Fragment() {
@@ -47,9 +47,9 @@ class HomeFragment : Fragment() {
         this.onSignInResult(it)
     }
 
-    private val signInIntent = AuthUI.getInstance()
+    private val signInIntent = authUi
         .createSignInIntentBuilder()
-        .setAvailableProviders(LOGIN_PROVIDERS)
+        .setAvailableProviders(loginProviders)
         .build()
 
     override fun onCreateView(
@@ -166,11 +166,5 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        private val LOGIN_PROVIDERS = arrayListOf(
-            AuthUI.IdpConfig.GoogleBuilder().build()
-        )
     }
 }

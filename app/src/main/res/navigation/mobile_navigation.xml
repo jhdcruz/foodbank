@@ -9,13 +9,43 @@
         android:id="@+id/navigation_home"
         android:name="com.ptech.foodbank.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/home_to_donate_fragment"
+            app:destination="@id/navigation_donate" />
+        <argument
+            android:name="bank"
+            android:defaultValue="test"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_donate"
+        android:name="com.ptech.foodbank.ui.donate.DonateFragment"
+        android:label="fragment_donate"
+        tools:layout="@layout/fragment_donate">
+        <argument
+            android:name="bank"
+            android:defaultValue="test"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_map"
         android:name="com.ptech.foodbank.ui.map.MapFragment"
         android:label="@string/title_map"
-        tools:layout="@layout/fragment_map" />
+        tools:layout="@layout/fragment_map">
+        <action
+            android:id="@+id/map_to_donate_fragment"
+            app:destination="@id/navigation_donate" />
+        <argument
+            android:name="bank"
+            android:defaultValue="test"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_history"
@@ -28,6 +58,5 @@
         android:name="com.ptech.foodbank.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
-
 
 </navigation>

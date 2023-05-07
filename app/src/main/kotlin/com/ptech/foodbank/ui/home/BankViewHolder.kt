@@ -3,6 +3,7 @@ package com.ptech.foodbank.ui.home
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -13,8 +14,12 @@ import com.ptech.foodbank.ui.home.BankUtils.getBankActionCall
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionWeb
 import com.ptech.foodbank.ui.home.BankUtils.getBankCapacity
 import com.ptech.foodbank.ui.home.BankUtils.getBankImage
+import com.ptech.foodbank.utils.Auth.getAuth
+import com.ptech.foodbank.utils.Feedback.showToast
 
 class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+
+    private var currentUser = getAuth.currentUser
     private val viewContext = view.context
 
     fun setBankImage(image: String) {
@@ -45,10 +50,17 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         textView.text = bio
     }
 
-    fun setBankOffer() {
-        val dirButton = view.findViewById<MaterialButton>(R.id.bank_action_offer)
+    fun setBankActionDonate(bank: String) {
+        val offerButton = view.findViewById<MaterialButton>(R.id.bank_action_offer)
 
-        dirButton.setOnClickListener {
+        offerButton.setOnClickListener {
+            // Action requires user to be logged in
+            if (currentUser == null) {
+                viewContext.showToast("Please login to donate")
+            } else {
+                val route = HomeFragmentDirections.homeToDonateFragment(bank)
+                view.findNavController().navigate(route)
+            }
         }
     }
 

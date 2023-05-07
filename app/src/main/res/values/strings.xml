@@ -6,7 +6,7 @@
 
     <string name="get_current_location">Get current location</string>
     <string name="food_bank_location_preview">Food bank location preview</string>
-    <string name="view">View</string>
+    <string name="donate">Donate</string>
     <string name="call">Call</string>
     <string name="website">Website</string>
     <string name="food_bank_load_capacity">Food bank load capacity</string>

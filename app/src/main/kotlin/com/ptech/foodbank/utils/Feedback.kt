@@ -4,11 +4,11 @@ import android.content.Context
 import android.widget.Toast
 
 object Feedback {
-    fun Context.showToast(msg: String, duration: Int? = null) {
+    fun Context.showToast(msg: String, duration: Int = Toast.LENGTH_SHORT) {
         Toast.makeText(
             this,
             msg,
-            duration ?: Toast.LENGTH_SHORT,
+            duration,
         )
             .show()
     }
