@@ -7,7 +7,7 @@ coroutines = "1.7.0"
 detekt = "1.23.0-RC3"
 espressoCore = "3.5.1"
 googleServices = "4.3.15"
-gradleVersion = "8.2.0-alpha01"
+gradleVersion = "8.2.0-alpha02"
 junit = "4.13.2"
 firebase = "32.0.0"
 perfPlugin = "1.4.2"
@@ -33,21 +33,27 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 [bundles]
 firebase = [
-    "firebase-analytics",
-    "firebase-crashlytics",
-    "firebase-firestore",
-    "firebase-perf",
-    "firebase-auth",
-    "firebase-ui-auth",
+  "firebase-analytics",
+  "firebase-crashlytics",
+  "firebase-firestore",
+  "firebase-perf",
+  "firebase-auth",
+  "firebase-ui-auth",
 ]
 lifecycle = ["lifecycle-livedata", "lifecycle-runtime", "lifecycle-viewmodel"]
-mapbox = ["mapbox", "mapbox-discover", "mapbox-search", "mapbox-navigation", "mapbox-search-ui"]
+mapbox = [
+  "mapbox",
+  "mapbox-discover",
+  "mapbox-search",
+  "mapbox-navigation",
+  "mapbox-search-ui",
+]
 navigation = ["navigation-fragment", "navigation-ui"]
 test-extensions = ["junit-ext", "espresso-core"]
 play-services = [
-    "play-services-location",
-    "play-services-coroutines",
-    "play-services-auth",
+  "play-services-location",
+  "play-services-coroutines",
+  "play-services-auth",
 ]
 
 [libraries]
