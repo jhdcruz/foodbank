@@ -13,7 +13,7 @@
         app:mapbox_cameraTargetLat="14.486989"
         app:mapbox_cameraTargetLng="120.8377278"
         app:mapbox_cameraZoom="10.0"
-        app:mapbox_logoGravity="top|start" />
+        app:mapbox_logoGravity="top|end" />
 
     <LinearLayout
         android:layout_width="wrap_content"
