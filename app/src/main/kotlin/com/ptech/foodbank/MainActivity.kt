@@ -23,6 +23,20 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
 
         val navController: NavController = navHostFragment.navController
+
+        // hide bottom navigation on certain destination
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.navigation_donate -> {
+                    navView.visibility = BottomNavigationView.GONE
+                }
+
+                else -> {
+                    navView.visibility = BottomNavigationView.VISIBLE
+                }
+            }
+        }
+
         navView.setupWithNavController(navController)
     }
 }
