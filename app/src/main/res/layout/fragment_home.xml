@@ -49,4 +49,20 @@
             android:hint="@string/searchbar_hint" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.search.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/searchbar_hint"
+        app:layout_anchor="@id/search_bar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/bank_search_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/component_bank_card" />
+
+    </com.google.android.material.search.SearchView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
