@@ -3,7 +3,6 @@ package com.ptech.foodbank.ui.map
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,10 +18,10 @@ import androidx.navigation.findNavController
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.GeoPoint
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
@@ -108,14 +107,17 @@ class MapFragment : Fragment() {
 
         // Check if location is enabled
         if (!viewContext.isLocationEnabled()) {
-            Snackbar.make(
-                binding.root,
-                "Location is currently disabled",
-                Snackbar.LENGTH_LONG,
-            )
-                // give option to enable it
-                .setAction("ENABLE") {
+            MaterialAlertDialogBuilder(viewContext)
+                .setCancelable(false)
+                // set icon and adapt on theme change
+                .setTitle("Location is currently disabled")
+                .setMessage("Please enable location to use this feature")
+                .setPositiveButton("Enable") { _, _ ->
+                    // redirect to device location setting
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                }
+                .setNegativeButton("Ignore") { _, _ ->
+                    // do nothing
                 }
                 .show()
         }
@@ -226,7 +228,7 @@ class MapFragment : Fragment() {
         // reuse bank component card used in home tab
         val card = LayoutInflater.from(context).inflate(R.layout.component_bank_card, null)
 
-        val dialog = AlertDialog.Builder(context)
+        val dialog = MaterialAlertDialogBuilder(viewContext)
             .setView(card)
             .create()
 
