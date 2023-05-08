@@ -12,7 +12,7 @@
         <item name="colorOnSecondary">?attr/colorOnSecondary</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?android:attr/windowBackground</item>
+        <item name="android:statusBarColor">?android:attr/colorBackground</item>
         <item name="android:windowLightNavigationBar">true</item>
     </style>
 </resources>
