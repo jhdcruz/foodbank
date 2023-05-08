@@ -1,7 +1,6 @@
 package com.ptech.foodbank.ui.home
 
 import android.app.Activity.RESULT_OK
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -17,6 +16,7 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.search.SearchBar
 import com.ptech.foodbank.R
@@ -94,7 +94,7 @@ class HomeFragment : Fragment() {
                         // start login instance
                         signInLauncher.launch(signInIntent)
                     } else {
-                        AlertDialog.Builder(requireContext())
+                        MaterialAlertDialogBuilder(requireContext())
                             .setTitle("Sign out?")
                             .setMessage("Are you sure you want to sign out?")
                             .setNegativeButton("Cancel", null)
