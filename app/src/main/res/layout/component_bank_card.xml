@@ -95,7 +95,7 @@
                     android:layout_height="@dimen/default_button_height"
                     android:layout_weight="1"
                     android:text="@string/donate"
-                    app:icon="@drawable/baseline_map_24" />
+                    app:icon="@drawable/baseline_donate_24" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/bank_action_call"
