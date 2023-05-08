@@ -153,6 +153,8 @@ class HomeFragment : Fragment() {
                 .data(currentUser?.photoUrl)
                 .target(
                     onSuccess = { result ->
+                        // clear tint to prevent image being covered
+                        avatar.iconTintList = null
                         avatar.icon = result
                     },
                 )
