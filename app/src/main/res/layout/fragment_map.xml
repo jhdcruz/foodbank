@@ -13,7 +13,7 @@
         app:mapbox_cameraTargetLat="14.486989"
         app:mapbox_cameraTargetLng="120.8377278"
         app:mapbox_cameraZoom="10.0"
-        app:mapbox_logoGravity="top|end" />
+        app:mapbox_logoGravity="bottom|start" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -24,23 +24,26 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_map_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
-            android:contentDescription="@string/get_current_location"
-            app:srcCompat="@drawable/baseline_map_24" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_current_location"
+            style="?attr/extendedFloatingActionButtonSecondaryStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp"
             android:contentDescription="@string/get_current_location"
-            app:srcCompat="@drawable/baseline_location_24" />
+            app:srcCompat="@drawable/baseline_layers_24" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_current_location"
+            style="?attr/extendedFloatingActionButtonPrimaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:contentDescription="@string/get_current_location"
+            android:text="@string/location"
+            app:icon="@drawable/baseline_location_24" />
 
     </LinearLayout>
 

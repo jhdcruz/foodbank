@@ -19,6 +19,7 @@ import androidx.navigation.findNavController
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
@@ -62,11 +63,11 @@ class MapFragment : Fragment() {
     private lateinit var pointAnnotation: PointAnnotation
     private lateinit var pointAnnotationManager: PointAnnotationManager
     private lateinit var viewAnnotationManager: ViewAnnotationManager
-    private lateinit var fabCurrentLocation: FloatingActionButton
+    private lateinit var fabCurrentLocation: ExtendedFloatingActionButton
     private lateinit var fabMapStyle: FloatingActionButton
 
     private val signInLauncher = registerForActivityResult(
-        FirebaseAuthUIActivityResultContract()
+        FirebaseAuthUIActivityResultContract(),
     ) {
         this.onSignInResult(it)
     }
@@ -126,7 +127,15 @@ class MapFragment : Fragment() {
         mapBox = Mapbox(mapView)
         viewAnnotationManager = mapView.viewAnnotationManager
         pointAnnotationManager = mapView.annotations.createPointAnnotationManager()
+        return view
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var isTracking = true
+        var isSatellite = false
+
+        // load mapbox
         mapView.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS,
         ) {
@@ -142,15 +151,6 @@ class MapFragment : Fragment() {
             }
         }
 
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        var isTracking = true
-        var isSatellite = false
-
-        // allow toggling user tracking
         if (!viewContext.isLocationEnabled()) {
             fabCurrentLocation.setOnClickListener {
                 viewContext.showToast("Location is currently disabled")
@@ -163,15 +163,15 @@ class MapFragment : Fragment() {
                         enabled = false
                     }
 
+                    fabCurrentLocation.setIconResource(R.drawable.baseline_location_searching_24)
                     viewContext.showToast("User tracking disabled")
-                    fabCurrentLocation.setImageResource(R.drawable.baseline_location_searching_24)
                     false
                 } else {
                     mapBox.setupGesturesListener()
                     mapBox.initLocationComponent()
 
                     viewContext.showToast("User tracking enabled")
-                    fabCurrentLocation.setImageResource(R.drawable.baseline_location_24)
+                    fabCurrentLocation.setIconResource(R.drawable.baseline_location_24)
                     true
                 }
             }
@@ -242,7 +242,7 @@ class MapFragment : Fragment() {
 
         mapViewModel.getBankOnLocation(
             requireContext(),
-            geopoint
+            geopoint,
         ).observe(viewLifecycleOwner) { bank ->
             cardName.text = bank.name
             cardBio.text = bank.bio
