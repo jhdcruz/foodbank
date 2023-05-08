@@ -10,8 +10,6 @@ import com.ptech.foodbank.R
 import com.ptech.foodbank.utils.Coil
 import java.text.DateFormat
 
-const val MAX_CHAR = 100
-
 class NotifViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
     fun setImage(image: String) {
@@ -24,9 +22,9 @@ class NotifViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     }
 
     fun setType(type: String) {
-        val notifType = view.findViewById<TextView>(R.id.notif_type)
+        val capitalize = type.replaceFirstChar { it.uppercase() }
 
-        notifType.text = type.replaceFirstChar { it.uppercase() }
+        view.findViewById<TextView>(R.id.notif_type).text = capitalize
     }
 
     fun setTitle(title: String) {
@@ -35,19 +33,12 @@ class NotifViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
     @SuppressLint("SetTextI18n")
     fun setBody(body: String) {
-        val truncBody = view.findViewById<TextView>(R.id.notif_body)
-
-        // cut off body if it's too long
-        if (body.length > MAX_CHAR) {
-            truncBody.text = body.substring(0, MAX_CHAR) + "..."
-        } else {
-            truncBody.text = body
-        }
+        view.findViewById<TextView>(R.id.notif_body).text = body
     }
 
     fun setDateCreated(dateCreated: Timestamp) {
-        val date = view.findViewById<TextView>(R.id.notif_date)
+        val date = DateFormat.getDateTimeInstance().format(dateCreated.toDate())
 
-        date.text = DateFormat.getDateTimeInstance().format(dateCreated.toDate())
+        view.findViewById<TextView>(R.id.notif_date).text = date
     }
 }

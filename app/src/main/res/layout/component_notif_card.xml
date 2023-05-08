@@ -74,15 +74,6 @@
                 android:textAppearance="?attr/textAppearanceBodyMedium"
                 android:textColor="?android:attr/textColorSecondary" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/view_details"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center"
-                android:layout_marginTop="8dp"
-                android:text="@string/view_details" />
-
         </LinearLayout>
 
     </LinearLayout>
