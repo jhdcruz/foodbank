@@ -28,4 +28,17 @@
     <string name="history">History</string>
     <string name="user">User</string>
     <string name="location">Location</string>
+    <string name="complete_address">Complete Address</string>
+    <string name="food_category">Type of food</string>
+    <string name="time">Time</string>
+    <string name="datetime_help">Select date and time of pickup</string>
+    <string name="food_info_help">Tell us about your food donation</string>
+    <string name="submit_donation">Submit Donation</string>
+    <string name="user_privacy_assurance">We\'ll never share your personal details.</string>
+    <string name="pickup_help">Where do we pick up the food?</string>
+    <string name="food_serving">Food serving/s</string>
+    <string name="food_bank_name">Food bank name</string>
+    <string name="date">Date</string>
+    <string name="add_info_help">Lastly, any additional information?</string>
+    <string name="add_info_ex">Receiving instructions, notes, etc…</string>
 </resources>

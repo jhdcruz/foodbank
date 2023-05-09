@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,19 +8,228 @@
     tools:context=".ui.donate.DonateFragment">
 
     <LinearLayout
+        android:id="@+id/acting_top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|center"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_donate"
+            style="?attr/materialIconButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/default_button_height"
+            android:contentDescription="@android:string/cancel"
+            app:icon="@drawable/baseline_arrow_back_48"
+            app:iconTint="?attr/colorOnSurface"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/sampleText"
-            android:layout_width="wrap_content"
+            android:id="@+id/bank_reference"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="eeeeeey"
-            android:textSize="18sp" />
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/food_bank_name"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Material3.ActionBar.Subtitle" />
 
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/acting_top_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/default_card_padding">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="12dp"
+                android:drawableStart="@drawable/baseline_info_24"
+                android:drawablePadding="6dp"
+                android:drawableTint="?attr/colorOnSurface"
+                android:text="@string/food_info_help"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="6dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/food_category"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/food_category"
+                    app:endIconMode="clear_text"
+                    app:helperText="Ex. Vegetarian, Halal, etc."
+                    app:helperTextEnabled="true"
+                    app:startIconDrawable="@drawable/baseline_label_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/food_serving"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="@string/food_serving"
+                    app:endIconMode="clear_text"
+                    app:helperText="How many people it can serve? An approximate will do."
+                    app:helperTextEnabled="true"
+                    app:startIconDrawable="@drawable/baseline_percent_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
+                android:drawableStart="@drawable/baseline_info_24"
+                android:drawablePadding="6dp"
+                android:drawableTint="?attr/colorOnSurface"
+                android:text="@string/pickup_help"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pickup_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:hint="@string/complete_address"
+                app:startIconDrawable="@drawable/baseline_marker_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
+                android:drawableStart="@drawable/baseline_info_24"
+                android:drawablePadding="6dp"
+                android:drawableTint="?attr/colorOnSurface"
+                android:text="@string/datetime_help"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="6dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/date_picker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/date"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/baseline_date_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:inputType="date" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/time_picker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/time"
+                    app:endIconMode="clear_text"
+                    app:startIconDrawable="@drawable/baseline_time_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:inputType="time" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:drawableStart="@drawable/baseline_info_24"
+                android:drawablePadding="6dp"
+                android:drawableTint="?attr/colorOnSurface"
+                android:text="@string/add_info_help"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/additional_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_info_ex"
+                app:startIconDrawable="@drawable/baseline_note_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:maxLines="5" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/default_button_height"
+                android:layout_gravity="center"
+                android:layout_marginVertical="28dp"
+                android:text="@string/submit_donation"
+                app:icon="@drawable/baseline_donate_24" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/baseline_gpp_good_24"
+                android:drawablePadding="6dp"
+                android:drawableTint="@color/gray"
+                android:text="@string/user_privacy_assurance"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                android:textColor="@color/gray" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
