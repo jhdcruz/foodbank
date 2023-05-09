@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.ptech.foodbank.databinding.FragmentHistoryBinding
 
 class HistoryFragment : Fragment() {
@@ -14,6 +18,11 @@ class HistoryFragment : Fragment() {
 
     private val binding get() = _binding!!
     private lateinit var notificationsViewModel: HistoryViewModel
+
+    private lateinit var refresher: SwipeRefreshLayout
+    private lateinit var loader: CircularProgressIndicator
+
+    private var donationsRecyclerView: RecyclerView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,7 +34,38 @@ class HistoryFragment : Fragment() {
         _binding = FragmentHistoryBinding.inflate(inflater, container, false)
         val root = binding.root
 
+        donationsRecyclerView = binding.donationList
+        donationsRecyclerView?.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+
+        // pull-to-refresh feature
+        refresher = binding.swipeRefresh
+        refresher.setOnRefreshListener {
+            getData()
+        }
+
+        // Show loading progress indicator
+        loader = binding.progressIndicator
+        loader.show()
+
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        getData()
+    }
+
+    private fun getData() {
+        notificationsViewModel.getDonations().observe(viewLifecycleOwner) {
+            if (it != null) {
+                donationsRecyclerView?.adapter = DonationRecyclerAdapter(it)
+
+                loader.hide()
+                refresher.isRefreshing = false
+            }
+        }
     }
 
     override fun onDestroyView() {

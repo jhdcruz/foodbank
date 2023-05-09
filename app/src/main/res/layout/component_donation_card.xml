@@ -1,0 +1,164 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/history_card"
+    style="?attr/materialCardViewOutlinedStyle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:layout_marginBottom="14dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="18dp"
+        android:paddingVertical="22dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:alpha="0.8"
+            android:drawableStart="@drawable/baseline_bank_24"
+            android:drawablePadding="6dp"
+            android:drawableTint="#787878"
+            android:gravity="center_vertical"
+            android:text="@string/app_name"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/donation_bank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_heading"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textFontWeight="700" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/donation_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            android:alpha="0.6"
+            android:gravity="center_vertical"
+            android:text="@string/sample_heading"
+            android:textColor="?android:attr/textColorSecondary" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="6dp"
+            android:alpha="0.5" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:alpha="0.8"
+            android:drawableStart="@drawable/baseline_food_24"
+            android:drawablePadding="4dp"
+            android:drawableTint="#A5A5A5"
+            android:text="@string/food_information"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/food_category"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/food_category"
+                android:drawablePadding="8dp"
+                android:maxLines="1"
+                android:text="@string/sample_heading"
+                android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/food_serving"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/food_serving"
+                android:drawablePadding="8dp"
+                android:maxLines="1"
+                android:text="@string/sample_heading"
+                android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        </LinearLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:alpha="0.8"
+            android:drawableStart="@drawable/baseline_marker_24"
+            android:drawablePadding="4dp"
+            android:drawableTint="#A5A5A5"
+            android:text="@string/pickup_address"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/pickup_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:drawablePadding="8dp"
+            android:text="@string/sample_heading"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:alpha="0.8"
+            android:drawableStart="@drawable/baseline_time_outline_24"
+            android:drawablePadding="4dp"
+            android:drawableTint="#A5A5A5"
+            android:text="@string/pickup_time"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/pickup_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:drawablePadding="8dp"
+            android:drawableTint="?attr/colorOnSurface"
+            android:text="@string/sample_heading"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/donation_notes_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:alpha="0.8"
+            android:drawableStart="@drawable/baseline_info_24"
+            android:drawablePadding="4dp"
+            android:drawableTint="#A5A5A5"
+            android:text="@string/notes"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/donation_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:drawablePadding="8dp"
+            android:text="@string/sample_text"
+            android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

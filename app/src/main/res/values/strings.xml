@@ -41,4 +41,9 @@
     <string name="date">Date</string>
     <string name="add_info_help">Lastly, any additional information?</string>
     <string name="add_info_ex">Receiving instructions, notes, etc…</string>
+    <string name="notes">Notes</string>
+    <string name="pickup_address">Pickup Address</string>
+    <string name="pickup_time">Pickup Until</string>
+    <string name="food_information">Food Information</string>
+    <string name="your_donations">Your Donations</string>
 </resources>
