@@ -20,7 +20,7 @@
             android:id="@+id/cancel_donate"
             style="?attr/materialIconButtonStyle"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/default_button_height"
+            android:layout_height="wrap_content"
             android:contentDescription="@android:string/cancel"
             app:icon="@drawable/baseline_arrow_back_48"
             app:iconTint="?attr/colorOnSurface"
@@ -37,6 +37,14 @@
             android:textAppearance="@style/TextAppearance.Material3.ActionBar.Subtitle" />
 
     </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/nestedScrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/acting_top_bar" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -56,7 +64,8 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="12dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="12dp"
                 android:drawableStart="@drawable/baseline_info_24"
                 android:drawablePadding="6dp"
                 android:drawableTint="?attr/colorOnSurface"
