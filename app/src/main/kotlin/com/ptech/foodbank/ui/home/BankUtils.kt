@@ -1,6 +1,7 @@
 package com.ptech.foodbank.ui.home
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -56,14 +57,22 @@ object BankUtils {
         }
     }
 
-    fun Context.getBankActionCall(callView: MaterialButton, phone: String) {
+    fun Context.getBankAction(callView: MaterialButton, phone: String, email: String) {
         val callIntent = Intent(Intent.ACTION_CALL).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             data = Uri.parse("tel:$phone")
         }
 
+        val chooserIntent = Intent.createChooser(
+            Intent(Intent.ACTION_SEND).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                type = "text/html"
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            },
+            "Send Email"
+        )
+
         callView.setOnClickListener {
-            // check for call/dialing permission
             if (!Permissions.isPermissionGranted(this, Manifest.permission.CALL_PHONE)) {
                 Permissions.getPermissions(
                     this,
@@ -73,20 +82,29 @@ object BankUtils {
                 )
             }
 
-            // callbacks
-            @Suppress("SwallowedException")
-            try {
-                // start call session
-                this.startActivity(callIntent)
-            } catch (e: SecurityException) {
-                // starting call without proper permissions
-                this.showToast("Phone permission required to continue")
-            } catch (e: ActivityNotFoundException) {
-                // report unusual error
-                this.showToast("Cannot initiate call session")
-
-                Crashlytics.reporter.recordException(e)
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Contact Bank")
+            builder.setMessage("Do you want to call or email the bank?")
+            builder.setPositiveButton("Call") { _, _ ->
+                try {
+                    this.startActivity(callIntent)
+                } catch (e: SecurityException) {
+                    this.showToast("Phone permission required to continue")
+                } catch (e: ActivityNotFoundException) {
+                    this.showToast("Cannot initiate call session")
+                    Crashlytics.reporter.recordException(e)
+                }
             }
+            builder.setNegativeButton("Email") { _, _ ->
+                try {
+                    this.startActivity(chooserIntent)
+                } catch (e: ActivityNotFoundException) {
+                    this.showToast("Cannot initiate email session")
+                    Crashlytics.reporter.recordException(e)
+                }
+            }
+            val dialog = builder.create()
+            dialog.show()
         }
     }
 

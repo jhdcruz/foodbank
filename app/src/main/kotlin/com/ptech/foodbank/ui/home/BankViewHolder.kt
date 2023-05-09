@@ -10,7 +10,7 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.firestore.GeoPoint
 import com.ptech.foodbank.R
 import com.ptech.foodbank.ui.home.BankUtils.getAddress
-import com.ptech.foodbank.ui.home.BankUtils.getBankActionCall
+import com.ptech.foodbank.ui.home.BankUtils.getBankAction
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionWeb
 import com.ptech.foodbank.ui.home.BankUtils.getBankCapacity
 import com.ptech.foodbank.ui.home.BankUtils.getBankImage
@@ -64,10 +64,10 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    fun setBankActionCall(phone: String) {
-        val callView = view.findViewById<MaterialButton>(R.id.bank_action_call)
+    fun setBankAction(phone: String, email: String) {
+        val IntentView = view.findViewById<MaterialButton>(R.id.bank_action_intent)
 
-        viewContext.getBankActionCall(callView, phone)
+        viewContext.getBankAction(IntentView, phone, email)
     }
 
     fun setBankActionWeb(website: String) {
