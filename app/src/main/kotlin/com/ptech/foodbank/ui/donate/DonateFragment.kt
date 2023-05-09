@@ -31,9 +31,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import java.util.Date
-import java.util.TimeZone
 
 private const val MILLISECOND = 1000
 private const val MINUTE = 60
@@ -171,17 +169,11 @@ class DonateFragment : Fragment() {
 
     private fun showDatePicker() {
         val today = MaterialDatePicker.todayInUtcMilliseconds()
-        val calendar = Calendar.getInstance(TimeZone.getDefault())
 
-        calendar.timeInMillis = today
-        calendar[Calendar.MONTH] = Calendar.DECEMBER
-        val decThisYear = calendar.timeInMillis
-
-        // date constraints to "today" and current year
+        // date constraints to "today"
         val constraintsBuilder =
             CalendarConstraints.Builder()
                 .setStart(today)
-                .setEnd(decThisYear)
 
         MaterialDatePicker.Builder.datePicker()
             .setTitleText("Date of Pickup")
@@ -234,6 +226,7 @@ class DonateFragment : Fragment() {
     /** Validate required fields */
     private fun validateFields(): Boolean {
         val errorMessage = "Field is required"
+        var timeErrors = false
 
         val category = foodCategory.editText?.text.toString()
         val serving = foodServing.editText?.text.toString()
@@ -256,6 +249,20 @@ class DonateFragment : Fragment() {
             datePicker.error = errorMessage
         }
 
+        // check if date is from previous and not today
+        if (currentSelectedDate!! < MaterialDatePicker.todayInUtcMilliseconds()) {
+            datePicker.isErrorEnabled = true
+            datePicker.error = "Date cannot be from previous days"
+            timeErrors = true
+        }
+
+        // check if time is has passed
+        if (selectedHour!! < LocalDateTime.now().hour) {
+            timePicker.isErrorEnabled = true
+            timePicker.error = "Time has passed, set a future time"
+            timeErrors = true
+        }
+
         if (time.isEmpty()) {
             timePicker.isErrorEnabled = true
             timePicker.error = errorMessage
@@ -270,7 +277,8 @@ class DonateFragment : Fragment() {
             serving.isNotEmpty() &&
             date.isNotEmpty() &&
             time.isNotEmpty() &&
-            address.isNotEmpty()
+            address.isNotEmpty() &&
+            timeErrors.not()
     }
 
     private suspend fun sendDonation(data: Donation) {
