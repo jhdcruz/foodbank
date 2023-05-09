@@ -36,7 +36,7 @@ import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
 import com.ptech.foodbank.ui.home.BankUtils.getAddress
-import com.ptech.foodbank.ui.home.BankUtils.getBankActionCall
+import com.ptech.foodbank.ui.home.BankUtils.getBankAction
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionWeb
 import com.ptech.foodbank.ui.home.BankUtils.getBankCapacity
 import com.ptech.foodbank.ui.home.BankUtils.getBankImage
@@ -236,7 +236,7 @@ class MapFragment : Fragment() {
         val cardCapacity = card.findViewById<LinearProgressIndicator>(R.id.bank_capacity)
         val cardAddress = card.findViewById<TextView>(R.id.bank_address)
         val cardOffer = card.findViewById<MaterialButton>(R.id.bank_action_offer)
-        val cardPhone = card.findViewById<MaterialButton>(R.id.bank_action_call)
+        val cardPhone = card.findViewById<MaterialButton>(R.id.bank_action_intent)
         val cardWebsite = card.findViewById<MaterialButton>(R.id.bank_action_web)
         val closeButton = card.findViewById<MaterialButton>(R.id.close_button)
 
@@ -250,7 +250,7 @@ class MapFragment : Fragment() {
             context.getAddress(cardAddress, bank.location)
             context.getBankCapacity(cardCapacity, bank.capacity)
             context.getBankImage(bank.image, cardImage)
-            context.getBankActionCall(cardPhone, bank.contacts["phone"]!!)
+            context.getBankAction(cardPhone, bank.contacts["phone"]!!, bank.contacts["email"]!!)
             context.getBankActionWeb(cardWebsite, bank.contacts["website"]!!)
 
             closeButton.visibility = View.VISIBLE
