@@ -154,12 +154,10 @@ class MapFragment : Fragment() {
             }
         }
 
-        if (!viewContext.isLocationEnabled()) {
-            fabCurrentLocation.setOnClickListener {
+        fabCurrentLocation.setOnClickListener {
+            if (!viewContext.isLocationEnabled()) {
                 viewContext.showToast("Location is currently disabled")
-            }
-        } else {
-            fabCurrentLocation.setOnClickListener {
+            } else {
                 isTracking = if (isTracking) {
                     mapBox.onCameraTrackingDismissed()
                     mapView.location2.updateSettings {
