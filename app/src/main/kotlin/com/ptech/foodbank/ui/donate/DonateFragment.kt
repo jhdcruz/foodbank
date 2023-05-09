@@ -6,6 +6,7 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -91,28 +92,15 @@ class DonateFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // use the bank reference as a mock toolbar title
         bankReference.text = args.bank
 
-        datePicker.setStartIconOnClickListener { showDatePicker() }
-        timePicker.setStartIconOnClickListener { showTimePicker() }
+        // text fields listeners
+        fieldsListener()
 
         submitDonation.setOnClickListener {
             if (!validateFields()) {
-                val errorMessage = "Field is required"
-
-                requireContext().showToast("Please fill in all fields")
-                foodCategory.isErrorEnabled = true
-                foodServing.isErrorEnabled = true
-                datePicker.isErrorEnabled = true
-                timePicker.isErrorEnabled = true
-                pickupAddress.isErrorEnabled = true
-                foodCategory.error = errorMessage
-                foodServing.error = errorMessage
-                datePicker.error = errorMessage
-                timePicker.error = errorMessage
-                pickupAddress.error = errorMessage
+                requireContext().showToast("Please fill in all required fields")
             } else {
                 submitDonation.text = "Submitting..."
                 submitDonation.isEnabled = false
@@ -137,6 +125,33 @@ class DonateFragment : Fragment() {
                     sendDonation(data)
                 }
             }
+        }
+    }
+
+    private fun fieldsListener() {
+        // date and time pickers
+        datePicker.setStartIconOnClickListener { showDatePicker() }
+        timePicker.setStartIconOnClickListener { showTimePicker() }
+
+        // errors
+        foodCategory.editText?.addTextChangedListener {
+            foodCategory.isErrorEnabled = false
+        }
+
+        foodServing.editText?.addTextChangedListener {
+            foodServing.isErrorEnabled = false
+        }
+
+        datePicker.editText?.addTextChangedListener {
+            datePicker.isErrorEnabled = false
+        }
+
+        timePicker.editText?.addTextChangedListener {
+            timePicker.isErrorEnabled = false
+        }
+
+        pickupAddress.editText?.addTextChangedListener {
+            pickupAddress.isErrorEnabled = false
         }
     }
 
@@ -222,19 +237,44 @@ class DonateFragment : Fragment() {
 
     /** Validate required fields */
     private fun validateFields(): Boolean {
+        val errorMessage = "Field is required"
+
         val category = foodCategory.editText?.text.toString()
         val serving = foodServing.editText?.text.toString()
         val date = datePicker.editText?.text.toString()
         val time = timePicker.editText?.text.toString()
         val address = pickupAddress.editText?.text.toString()
 
-        return !(
-            category.isEmpty() ||
-                serving.isEmpty() ||
-                date.isEmpty() ||
-                time.isEmpty() ||
-                address.isEmpty()
-            )
+        if (category.isEmpty()) {
+            foodCategory.isErrorEnabled = true
+            foodCategory.error = errorMessage
+        }
+
+        if (serving.isEmpty()) {
+            foodServing.isErrorEnabled = true
+            foodServing.error = errorMessage
+        }
+
+        if (date.isEmpty()) {
+            datePicker.isErrorEnabled = true
+            datePicker.error = errorMessage
+        }
+
+        if (time.isEmpty()) {
+            timePicker.isErrorEnabled = true
+            timePicker.error = errorMessage
+        }
+
+        if (address.isEmpty()) {
+            pickupAddress.isErrorEnabled = true
+            pickupAddress.error = errorMessage
+        }
+
+        return category.isNotEmpty() &&
+            serving.isNotEmpty() &&
+            date.isNotEmpty() &&
+            time.isNotEmpty() &&
+            address.isNotEmpty()
     }
 
     private suspend fun sendDonation(data: Donation) {
