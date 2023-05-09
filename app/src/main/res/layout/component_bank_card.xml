@@ -91,19 +91,19 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/bank_action_offer"
                     style="?attr/materialButtonStyle"
-                    android:layout_width="0dp"
+                    android:layout_width="0"
                     android:layout_height="@dimen/default_button_height"
                     android:layout_weight="1"
                     android:text="@string/donate"
                     app:icon="@drawable/baseline_map_24" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/bank_action_call"
+                    android:id="@+id/bank_action_intent"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/default_button_height"
                     android:layout_marginHorizontal="6dp"
-                    android:text="@string/call"
+                    android:text="@string/inquire"
                     app:icon="@drawable/baseline_call_24" />
 
                 <com.google.android.material.button.MaterialButton
