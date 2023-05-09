@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.ptech.foodbank.databinding.FragmentHistoryBinding
+import com.ptech.foodbank.utils.Auth.getAuth
+import com.ptech.foodbank.utils.Feedback.showToast
 
 class HistoryFragment : Fragment() {
 
@@ -23,6 +25,8 @@ class HistoryFragment : Fragment() {
     private lateinit var loader: CircularProgressIndicator
 
     private var donationsRecyclerView: RecyclerView? = null
+
+    private val currentUser = getAuth.currentUser
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +45,12 @@ class HistoryFragment : Fragment() {
         // pull-to-refresh feature
         refresher = binding.swipeRefresh
         refresher.setOnRefreshListener {
-            getData()
+            if (currentUser == null) {
+                requireContext().showToast("Login required")
+                refresher.isRefreshing = false
+            } else {
+                getData()
+            }
         }
 
         // Show loading progress indicator
@@ -54,7 +63,13 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getData()
+        if (currentUser == null) {
+            loader.hide()
+
+            requireContext().showToast("Login required")
+        } else {
+            getData()
+        }
     }
 
     private fun getData() {
