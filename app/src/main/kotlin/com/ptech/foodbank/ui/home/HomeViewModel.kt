@@ -24,4 +24,19 @@ class HomeViewModel : ViewModel() {
 
         return bankList
     }
+
+    fun searchBanks(query: String): LiveData<List<Bank>> {
+        val bankList = MutableLiveData<List<Bank>>()
+
+        db.searchBanks(query)
+            .get()
+            .addOnSuccessListener {
+                bankList.value = it.toObjects(Bank::class.java)
+            }
+            .addOnFailureListener { e ->
+                reporter.recordException(e)
+            }
+
+        return bankList
+    }
 }
