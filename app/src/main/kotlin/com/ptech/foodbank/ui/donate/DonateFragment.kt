@@ -121,7 +121,7 @@ class DonateFragment : Fragment() {
                     )
                 )
 
-                CoroutineScope(Dispatchers.IO).launch {
+                CoroutineScope(Dispatchers.Default).launch {
                     sendDonation(data)
                 }
             }
@@ -174,17 +174,13 @@ class DonateFragment : Fragment() {
         val calendar = Calendar.getInstance(TimeZone.getDefault())
 
         calendar.timeInMillis = today
-        calendar[Calendar.MONTH] = Calendar.JANUARY
-        val janThisYear = calendar.timeInMillis
-
-        calendar.timeInMillis = today
         calendar[Calendar.MONTH] = Calendar.DECEMBER
         val decThisYear = calendar.timeInMillis
 
-        // date constraints to current year
+        // date constraints to "today" and current year
         val constraintsBuilder =
             CalendarConstraints.Builder()
-                .setStart(janThisYear)
+                .setStart(today)
                 .setEnd(decThisYear)
 
         MaterialDatePicker.Builder.datePicker()
