@@ -19,6 +19,7 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.search.SearchBar
+import com.google.android.material.search.SearchView
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentHomeBinding
 import com.ptech.foodbank.utils.Auth.authUi
@@ -35,6 +36,7 @@ class HomeFragment : Fragment() {
     private lateinit var refresher: SwipeRefreshLayout
     private lateinit var loader: CircularProgressIndicator
     private lateinit var searchBar: SearchBar
+    private lateinit var searchView: SearchView
     private lateinit var avatar: MenuItem
 
     private var banksRecyclerView: RecyclerView? = null
@@ -67,6 +69,7 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 
         // search bar
+        searchView = binding.searchView
         searchBar = binding.searchBar
         searchBar.inflateMenu(R.menu.search_menu)
         avatar = searchBar.menu.findItem(R.id.user)
@@ -121,6 +124,17 @@ class HomeFragment : Fragment() {
             }
         }
 
+        searchView.editText
+            .setOnEditorActionListener { _, _, _ ->
+                loader.show()
+
+                searchBar.text = searchView.editText.text.toString()
+                searchView.hide()
+
+                search(searchView.editText.text.toString())
+                false
+            }
+
         loadAvatar()
         getData()
     }
@@ -135,6 +149,23 @@ class HomeFragment : Fragment() {
                 refresher.isRefreshing = false
             }
         }
+    }
+
+    private fun search(query: String) {
+        // using of observe() is not possible here
+        // it re-fetches the entire data, making search useless
+        val banks = homeViewModel.bankList
+
+        // we'll search manually, firestore doesn't support partial search
+        // and requires returning exact match
+        val filtered = banks.filter { bank ->
+            bank.name.contains(query, true)
+        }
+
+        banksRecyclerView?.adapter = BankRecyclerAdapter(filtered)
+
+        loader.hide()
+        refresher.isRefreshing = false
     }
 
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {

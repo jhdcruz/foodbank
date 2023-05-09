@@ -9,19 +9,20 @@ import com.ptech.foodbank.utils.Crashlytics.reporter
 
 class HomeViewModel : ViewModel() {
     private val db = FirebaseFactoryImpl()
+    private val mutableBankList = MutableLiveData<List<Bank>>()
+
+    val bankList: List<Bank> get() = mutableBankList.value ?: emptyList()
 
     fun banks(): LiveData<List<Bank>> {
-        val bankList = MutableLiveData<List<Bank>>()
-
         db.getBanks()
             .get()
             .addOnSuccessListener {
-                bankList.value = it.toObjects(Bank::class.java)
+                mutableBankList.value = it.toObjects(Bank::class.java)
             }
             .addOnFailureListener { e ->
                 reporter.recordException(e)
             }
 
-        return bankList
+        return mutableBankList
     }
 }
