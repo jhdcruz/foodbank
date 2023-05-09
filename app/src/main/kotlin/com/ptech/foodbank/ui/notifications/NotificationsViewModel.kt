@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.MetadataChanges
 import com.ptech.foodbank.data.Notifications
-import com.ptech.foodbank.db.FirestoreFactory
+import com.ptech.foodbank.db.FirebaseFactoryImpl
 
 class NotificationsViewModel : ViewModel() {
-    private val db = FirestoreFactory()
+    private val db = FirebaseFactoryImpl()
 
     fun notifications(): LiveData<List<Notifications>> {
         val notificationsList = MutableLiveData<List<Notifications>>()

@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ptech.foodbank.data.Bank
-import com.ptech.foodbank.db.FirestoreFactory
+import com.ptech.foodbank.db.FirebaseFactoryImpl
 import com.ptech.foodbank.utils.Crashlytics.reporter
 
 class HomeViewModel : ViewModel() {
-    private val db = FirestoreFactory()
+    private val db = FirebaseFactoryImpl()
 
     fun banks(): LiveData<List<Bank>> {
         val bankList = MutableLiveData<List<Bank>>()

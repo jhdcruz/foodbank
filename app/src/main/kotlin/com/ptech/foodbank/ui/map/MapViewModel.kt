@@ -8,12 +8,12 @@ import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.MetadataChanges
 import com.mapbox.geojson.Point
 import com.ptech.foodbank.data.Bank
-import com.ptech.foodbank.db.FirestoreFactory
+import com.ptech.foodbank.db.FirebaseFactoryImpl
 import com.ptech.foodbank.utils.Crashlytics.reporter
 import com.ptech.foodbank.utils.Feedback.showToast
 
 class MapViewModel : ViewModel() {
-    private val db = FirestoreFactory()
+    private val db = FirebaseFactoryImpl()
 
     fun availableBanks(): LiveData<List<Point>> {
         val bankLocations: MutableLiveData<List<Point>> = MutableLiveData()
