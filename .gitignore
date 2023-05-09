@@ -32,6 +32,8 @@ google-services.json
 *firebase*
 firestore.*
 
+!app/src/main/kotlin/com/ptech/foodbank/db/*
+
 # Android Profiling
 *.hprof
 
