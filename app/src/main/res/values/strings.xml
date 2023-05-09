@@ -7,7 +7,9 @@
     <string name="get_current_location">Get current location</string>
     <string name="food_bank_location_preview">Food bank location preview</string>
     <string name="donate">Donate</string>
+    <string name="inquire">Inquire</string>
     <string name="call">Call</string>
+    <string name="email">Email</string>
     <string name="website">Website</string>
     <string name="food_bank_load_capacity">Food bank load capacity</string>
     <string name="searchbar_hint">Search for food banks</string>
@@ -46,4 +48,5 @@
     <string name="pickup_time">Pickup Until</string>
     <string name="food_information">Food Information</string>
     <string name="your_donations">Your Donations</string>
+    <string name="inquiry_help">Choose your preferred method of inquiry</string>
 </resources>

@@ -1,16 +1,19 @@
 package com.ptech.foodbank.ui.home
 
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.firebase.firestore.GeoPoint
 import com.ptech.foodbank.R
 import com.ptech.foodbank.ui.home.BankUtils.getAddress
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionCall
+import com.ptech.foodbank.ui.home.BankUtils.getBankActionEmail
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionWeb
 import com.ptech.foodbank.ui.home.BankUtils.getBankCapacity
 import com.ptech.foodbank.ui.home.BankUtils.getBankImage
@@ -64,15 +67,23 @@ class BankViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    fun setBankActionCall(phone: String) {
-        val callView = view.findViewById<MaterialButton>(R.id.bank_action_call)
+    fun setBankAction(email: String, phone: String, website: String) {
+        val callView = view.findViewById<MaterialButton>(R.id.bank_action)
 
-        viewContext.getBankActionCall(callView, phone)
-    }
+        callView.setOnClickListener {
+            val layout =
+                LayoutInflater.from(viewContext).inflate(R.layout.component_inquire_dialog, null)
+            val dialog = MaterialAlertDialogBuilder(viewContext).setView(layout).create()
 
-    fun setBankActionWeb(website: String) {
-        val webButton = view.findViewById<MaterialButton>(R.id.bank_action_web)
+            val callButton = layout.findViewById<MaterialButton>(R.id.bank_action_call)
+            val emailButton = layout.findViewById<MaterialButton>(R.id.bank_action_email)
+            val webButton = layout.findViewById<MaterialButton>(R.id.bank_action_web)
 
-        viewContext.getBankActionWeb(webButton, website)
+            viewContext.getBankActionCall(callButton, phone)
+            viewContext.getBankActionEmail(emailButton, email)
+            viewContext.getBankActionWeb(webButton, website)
+
+            dialog.show()
+        }
     }
 }

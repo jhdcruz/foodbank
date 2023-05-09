@@ -36,6 +36,7 @@ import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentMapBinding
 import com.ptech.foodbank.ui.home.BankUtils.getAddress
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionCall
+import com.ptech.foodbank.ui.home.BankUtils.getBankActionEmail
 import com.ptech.foodbank.ui.home.BankUtils.getBankActionWeb
 import com.ptech.foodbank.ui.home.BankUtils.getBankCapacity
 import com.ptech.foodbank.ui.home.BankUtils.getBankImage
@@ -147,7 +148,7 @@ class MapFragment : Fragment() {
             addAnnotationsToMap()
             pointAnnotationManager.addClickListener {
                 val geoPoint = GeoPoint(it.point.latitude(), it.point.longitude())
-                showBankDialog(viewContext, geoPoint)
+                showBankDialog(geoPoint)
 
                 true
             }
@@ -224,9 +225,9 @@ class MapFragment : Fragment() {
 
     /** Show bank dialog when clicking markers */
     @SuppressLint("SetTextI18n")
-    private fun showBankDialog(context: Context, geopoint: GeoPoint) {
+    private fun showBankDialog(geopoint: GeoPoint) {
         // reuse bank component card used in home tab
-        val card = LayoutInflater.from(context).inflate(R.layout.component_bank_card, null)
+        val card = LayoutInflater.from(viewContext).inflate(R.layout.component_bank_card, null)
 
         val dialog = MaterialAlertDialogBuilder(viewContext)
             .setView(card)
@@ -238,8 +239,7 @@ class MapFragment : Fragment() {
         val cardCapacity = card.findViewById<LinearProgressIndicator>(R.id.bank_capacity)
         val cardAddress = card.findViewById<TextView>(R.id.bank_address)
         val cardOffer = card.findViewById<MaterialButton>(R.id.bank_action_offer)
-        val cardPhone = card.findViewById<MaterialButton>(R.id.bank_action_call)
-        val cardWebsite = card.findViewById<MaterialButton>(R.id.bank_action_web)
+        val cardAction = card.findViewById<MaterialButton>(R.id.bank_action)
         val closeButton = card.findViewById<MaterialButton>(R.id.close_button)
 
         mapViewModel.getBankOnLocation(
@@ -249,15 +249,26 @@ class MapFragment : Fragment() {
             cardName.text = bank.name
             cardBio.text = bank.bio
 
-            context.getAddress(cardAddress, bank.location)
-            context.getBankCapacity(cardCapacity, bank.capacity)
-            context.getBankImage(bank.image, cardImage)
-            context.getBankActionCall(cardPhone, bank.contacts["phone"]!!)
-            context.getBankActionWeb(cardWebsite, bank.contacts["website"]!!)
+            viewContext.getAddress(cardAddress, bank.location)
+            viewContext.getBankCapacity(cardCapacity, bank.capacity)
+            viewContext.getBankImage(bank.image, cardImage)
 
-            closeButton.visibility = View.VISIBLE
-            closeButton.setOnClickListener { dialog.dismiss() }
-            dialog.show()
+            cardAction.setOnClickListener {
+                val layout =
+                    LayoutInflater.from(viewContext)
+                        .inflate(R.layout.component_inquire_dialog, null)
+                val inquireDialog = MaterialAlertDialogBuilder(viewContext).setView(layout).create()
+
+                val callButton = layout.findViewById<MaterialButton>(R.id.bank_action_call)
+                val emailButton = layout.findViewById<MaterialButton>(R.id.bank_action_email)
+                val web = layout.findViewById<MaterialButton>(R.id.bank_action_web)
+
+                viewContext.getBankActionCall(callButton, bank.contacts["phone"]!!)
+                viewContext.getBankActionEmail(emailButton, bank.contacts["email"]!!)
+                viewContext.getBankActionWeb(web, bank.contacts["website"]!!)
+
+                inquireDialog.show()
+            }
 
             cardOffer.setOnClickListener {
                 if (currentUser == null) {
@@ -271,6 +282,10 @@ class MapFragment : Fragment() {
                     dialog.dismiss()
                 }
             }
+
+            closeButton.visibility = View.VISIBLE
+            closeButton.setOnClickListener { dialog.dismiss() }
+            dialog.show()
         }
     }
 

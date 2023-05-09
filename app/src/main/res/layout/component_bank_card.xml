@@ -100,30 +100,23 @@
                     style="?attr/materialButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/default_button_height"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:text="@string/donate"
                     app:icon="@drawable/baseline_donate_24" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/bank_action_call"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/bank_action"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    android:layout_width="0dp"
                     android:layout_height="@dimen/default_button_height"
                     android:layout_marginHorizontal="6dp"
-                    android:text="@string/call"
-                    app:icon="@drawable/baseline_call_24" />
+                    android:layout_weight="1"
+                    android:text="@string/inquire"
+                    app:icon="@drawable/baseline_support_24" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/bank_action_web"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/default_button_height"
-                    android:text="@string/website"
-                    app:icon="@drawable/baseline_share_24" />
 
             </LinearLayout>
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 </com.google.android.material.card.MaterialCardView>
