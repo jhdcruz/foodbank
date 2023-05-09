@@ -1,5 +1,6 @@
 package com.ptech.foodbank.ui.donate
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -15,13 +16,26 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.MaterialTimePicker.INPUT_MODE_CLOCK
+import com.google.firebase.Timestamp
+import com.ptech.foodbank.data.Donation
 import com.ptech.foodbank.databinding.FragmentDonateBinding
+import com.ptech.foodbank.db.FirebaseFactoryImpl
+import com.ptech.foodbank.utils.Auth.getAuth
+import com.ptech.foodbank.utils.Feedback.showToast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Date
 import java.util.TimeZone
+
+private const val MILLISECOND = 1000
+private const val MINUTE = 60
 
 class DonateFragment : Fragment() {
 
@@ -35,6 +49,7 @@ class DonateFragment : Fragment() {
     private lateinit var timePicker: TextInputLayout
     private lateinit var pickupAddress: TextInputLayout
     private lateinit var additionalInfo: TextInputLayout
+    private lateinit var submitDonation: MaterialButton
     private lateinit var cancelDonate: MaterialButton
 
     private var currentSelectedDate: Long? = null
@@ -45,6 +60,7 @@ class DonateFragment : Fragment() {
     // which is the bank name, for referencing in pushing data
     private val args: DonateFragmentArgs by navArgs()
     private val editable = Editable.Factory.getInstance()
+    private val currentUser = getAuth.currentUser
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,6 +77,7 @@ class DonateFragment : Fragment() {
         timePicker = binding.timePicker
         pickupAddress = binding.pickupAddress
         additionalInfo = binding.additionalInfo
+        submitDonation = binding.submitDonation
         cancelDonate = binding.cancelDonate
 
         cancelDonate.setOnClickListener {
@@ -71,6 +88,7 @@ class DonateFragment : Fragment() {
         return view
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -79,6 +97,61 @@ class DonateFragment : Fragment() {
 
         datePicker.setStartIconOnClickListener { showDatePicker() }
         timePicker.setStartIconOnClickListener { showTimePicker() }
+
+        submitDonation.setOnClickListener {
+            if (!validateFields()) {
+                val errorMessage = "Field is required"
+
+                requireContext().showToast("Please fill in all fields")
+                foodCategory.isErrorEnabled = true
+                foodServing.isErrorEnabled = true
+                datePicker.isErrorEnabled = true
+                timePicker.isErrorEnabled = true
+                pickupAddress.isErrorEnabled = true
+                foodCategory.error = errorMessage
+                foodServing.error = errorMessage
+                datePicker.error = errorMessage
+                timePicker.error = errorMessage
+                pickupAddress.error = errorMessage
+            } else {
+                submitDonation.text = "Submitting..."
+                submitDonation.isEnabled = false
+
+                val data = Donation(
+                    bank = args.bank.toString(),
+                    category = foodCategory.editText?.text.toString(),
+                    serving = foodServing.editText?.text.toString().toInt(),
+                    pickupDate = processPickupDate(),
+                    dateCreated = Timestamp.now(),
+                    notes = additionalInfo.editText?.text.toString(),
+                    pickupAddress = pickupAddress.editText?.text.toString(),
+                    donor = mapOf<String, Any>(
+                        "id" to currentUser?.uid!!.toString(),
+                        "name" to currentUser.displayName!!.toString(),
+                        "email" to currentUser.email!!.toString(),
+                        "phone" to currentUser.phoneNumber!!.toString()
+                    )
+                )
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    sendDonation(data)
+                }
+            }
+        }
+    }
+
+    /** Process date and time from the fields to be saved as firestore's timestamp */
+    private fun processPickupDate(): Timestamp {
+        // combine date and time from the fields to return date
+        val dateTime = Date(
+            currentSelectedDate!! +
+                (selectedHour!! * MINUTE * MINUTE * MILLISECOND) +
+                (selectedMinute!! * MINUTE * MILLISECOND)
+        )
+
+        // convert to timestamp,
+        // timestamp requires Date over LocalDateTime
+        return Timestamp(dateTime)
     }
 
     private fun showDatePicker() {
@@ -145,5 +218,40 @@ class DonateFragment : Fragment() {
         val minuteAsText = if (minute < 10) "0$minute" else minute
 
         "$hourAsText:$minuteAsText".also { timePicker.editText?.text = editable.newEditable(it) }
+    }
+
+    /** Validate required fields */
+    private fun validateFields(): Boolean {
+        val category = foodCategory.editText?.text.toString()
+        val serving = foodServing.editText?.text.toString()
+        val date = datePicker.editText?.text.toString()
+        val time = timePicker.editText?.text.toString()
+        val address = pickupAddress.editText?.text.toString()
+
+        return !(
+            category.isEmpty() ||
+                serving.isEmpty() ||
+                date.isEmpty() ||
+                time.isEmpty() ||
+                address.isEmpty()
+            )
+    }
+
+    private suspend fun sendDonation(data: Donation) {
+        val db = FirebaseFactoryImpl()
+
+        db.addDonation(data)
+            .addOnSuccessListener {
+                // navigate back up
+                requireContext().showToast("Donation offer sent successfully")
+                view?.findNavController()?.navigateUp()
+            }
+            .addOnFailureListener {
+                requireContext().showToast("Failed to send donation offer")
+            }
+            .addOnCanceledListener {
+                requireContext().showToast("Donation offer cancelled")
+            }
+            .await()
     }
 }
