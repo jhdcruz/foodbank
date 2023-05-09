@@ -3,6 +3,8 @@ package com.ptech.foodbank.ui.home
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -19,12 +21,14 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.search.SearchBar
+import com.google.android.material.search.SearchView
 import com.ptech.foodbank.R
 import com.ptech.foodbank.databinding.FragmentHomeBinding
 import com.ptech.foodbank.utils.Auth.authUi
 import com.ptech.foodbank.utils.Auth.getAuth
 import com.ptech.foodbank.utils.Auth.loginProviders
 import com.ptech.foodbank.utils.Coil
+
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -35,6 +39,7 @@ class HomeFragment : Fragment() {
     private lateinit var refresher: SwipeRefreshLayout
     private lateinit var loader: CircularProgressIndicator
     private lateinit var searchBar: SearchBar
+    private lateinit var searchView: SearchView
     private lateinit var avatar: MenuItem
 
     private var banksRecyclerView: RecyclerView? = null
@@ -121,8 +126,22 @@ class HomeFragment : Fragment() {
             }
         }
 
+//        searchView.editText.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+//                // do nothing
+//            }
+//
+//            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+//                search(searchView.editText.text.toString())
+//            }
+//
+//            override fun afterTextChanged(editable: Editable) {
+//                // do nothing
+//            }
+//        })
         loadAvatar()
         getData()
+
     }
 
     private fun getData() {
@@ -161,6 +180,17 @@ class HomeFragment : Fragment() {
                 .build()
 
         loader.enqueue(request)
+    }
+
+    private fun search(query: String) {
+        // get banks list
+        homeViewModel.searchBanks(query).observe(viewLifecycleOwner) {
+            if (it != null) {
+                banksRecyclerView?.adapter = BankRecyclerAdapter(it)
+                loader.hide()
+                refresher.isRefreshing = false
+            }
+        }
     }
 
     override fun onDestroyView() {
