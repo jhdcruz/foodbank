@@ -2,22 +2,61 @@
 
 A simple food bank application that allows users to donate food to the food bank.
 
+## Features
+
+- Listing and viewing of available food banks and their details
+- Integration with Mapbox SDK for interactive viewing of food banks
+- Send food donations offers
+- Track your food donations
+
+## Screenshots
+
+<img src="./docs/2.png" style="max-width: 40%;" />
+<img src="./docs/1.png" style="max-width: 40%;" />
+<img src="./docs/3.png" style="max-width: 40%;" />
+<img src="./docs/4.png" style="max-width: 40%;" />
+<img src="./docs/5.png" style="max-width: 40%;" />
+<img src="./docs/6.png" style="max-width: 40%;" />
+<img src="./docs/8.png" style="max-width: 40%;" />
+
+## Infrastructure
+
+This project integrates several tooling and libraries.
+
+### Development Integrations & Tooling
+
+- Qodana
+- Github Actions
+- Detekt
+- Trunk.io
+
+### Libraries
+
+- Mapbox Android SDK
+- Material 3
+- Coil
+- Firebase
+    - Firestore
+    - Crashlytics
+    - Performance
+    - Authentication
+
 ## Development
 
 ### Setting up Mapbox API
 
 > https://account.mapbox.com/access-tokens/ | https://docs.mapbox.com/android/maps/guides/install/
 
--   A public access token: From your account's tokens page, you can either copy your default public
-    token or click the Create a token button to create a new public token.
+- A public access token: From your account's tokens page, you can either copy your default public
+  token or click the Create a token button to create a new public token.
 
--   A secret access token with the `Downloads:Read` scope.
-    -   From your account's tokens page, click the Create a token button.
-    -   From the token creation page, give your token a name and make sure the box next to the
-        `Downloads:Read` scope is checked.
-    -   Click the Create token button at the bottom of the page to create your token.
-    -   The token you've created is a secret token, which means you will only have one opportunity to
-        copy it somewhere secure.
+- A secret access token with the `Downloads:Read` scope.
+    - From your account's tokens page, click the Create a token button.
+    - From the token creation page, give your token a name and make sure the box next to the
+      `Downloads:Read` scope is checked.
+    - Click the Create token button at the bottom of the page to create your token.
+    - The token you've created is a secret token, which means you will only have one opportunity to
+      copy it somewhere secure.
 
 #### Configure your secret token
 
@@ -55,9 +94,9 @@ R.strings.xml file.
 
 **Uses:**
 
--   Firestore
--   Crashlytics
--   Performance
+- Firestore
+- Crashlytics
+- Performance
 
 Download `google-services.json` from firebase console's project settings, and copy it the the
 project directory
@@ -75,7 +114,8 @@ Get `SHA-1` and `SHA-256` fingerprints using the ff. command
 Add both the fingerprints in firebase console's project settings right
 below where `google-services.json` is located.
 
-> Resource: [https://developers.google.com/android/guides/client-auth#self-signing_your_application](https://developers.google.com/android/guides/client-auth#self-signing_your_application)
+>
+Resource: [https://developers.google.com/android/guides/client-auth#self-signing_your_application](https://developers.google.com/android/guides/client-auth#self-signing_your_application)
 
 ## License
 
