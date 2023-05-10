@@ -64,7 +64,7 @@ class DonateFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentDonateBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -115,8 +115,8 @@ class DonateFragment : Fragment() {
                         "id" to currentUser?.uid!!.toString(),
                         "name" to currentUser.displayName!!.toString(),
                         "email" to currentUser.email!!.toString(),
-                        "phone" to currentUser.phoneNumber!!.toString()
-                    )
+                        "phone" to currentUser.phoneNumber!!.toString(),
+                    ),
                 )
 
                 CoroutineScope(Dispatchers.Default).launch {
@@ -159,7 +159,7 @@ class DonateFragment : Fragment() {
         val dateTime = Date(
             currentSelectedDate!! +
                 (selectedHour!! * MINUTE * MINUTE * MILLISECOND) +
-                (selectedMinute!! * MINUTE * MILLISECOND)
+                (selectedMinute!! * MINUTE * MILLISECOND),
         )
 
         // convert to timestamp,
@@ -190,7 +190,7 @@ class DonateFragment : Fragment() {
         currentSelectedDate = dateTimeStampInMillis
         val dateTime: LocalDateTime = LocalDateTime.ofInstant(
             Instant.ofEpochMilli(currentSelectedDate!!),
-            ZoneId.systemDefault()
+            ZoneId.systemDefault(),
         )
         val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         datePicker.editText?.text = editable.newEditable(dateAsFormattedText)
@@ -256,10 +256,10 @@ class DonateFragment : Fragment() {
             timeErrors = true
         }
 
-        // check if time is has passed
-        if (selectedHour!! < LocalDateTime.now().hour) {
-            timePicker.isErrorEnabled = true
-            timePicker.error = "Time has passed, set a future time"
+        // check if date is from previous and not today
+        if (currentSelectedDate!! == null) {
+            datePicker.isErrorEnabled = true
+            datePicker.error = "Date cannot be null"
             timeErrors = true
         }
 
