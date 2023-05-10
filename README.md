@@ -11,13 +11,15 @@ A simple food bank application that allows users to donate food to the food bank
 
 ## Screenshots
 
-<img src="./docs/2.png" style="max-width: 40%;" />
-<img src="./docs/1.png" style="max-width: 40%;" />
-<img src="./docs/3.png" style="max-width: 40%;" />
-<img src="./docs/4.png" style="max-width: 40%;" />
-<img src="./docs/5.png" style="max-width: 40%;" />
-<img src="./docs/6.png" style="max-width: 40%;" />
-<img src="./docs/8.png" style="max-width: 40%;" />
+<p align="center">
+<img src="./docs/2.png" width="30%" />
+<img src="./docs/1.png" width="30%" />
+<img src="./docs/3.png" width="30%" />
+<img src="./docs/4.png" width="30%" />
+<img src="./docs/5.png" width="30%" />
+<img src="./docs/6.png" width="30%" />
+<img src="./docs/8.png" width="30%" />
+</p>
 
 ## Infrastructure
 
